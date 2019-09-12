@@ -1,5 +1,3 @@
-using System;
-
 namespace BankingLedger
 {
     public class User
