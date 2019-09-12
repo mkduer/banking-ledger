@@ -1,4 +1,5 @@
 ﻿using System;
+using BankingLedger;
 
 namespace BankingLedger
 {
@@ -6,7 +7,10 @@ namespace BankingLedger
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            User user = new User();
+            user.FirstName = "Constantina";
+            user.LastName = "Random";
+            Console.WriteLine($"Hello {user.FirstName} {user.LastName}!");
         }
     }
 }
