@@ -1,5 +1,3 @@
-using System;
-using BankingLedger;
 using Xunit;
 
 namespace BankingLedger.UnitTests
