@@ -4,7 +4,7 @@ namespace BankingLedger
 {
     public class Account
     {
-        private double balance { get; set; }
+        private double balance;
         public double Balance {
             get { return balance; }
             set { balance = value; }
@@ -15,9 +15,6 @@ namespace BankingLedger
             balance = startingBalance;
         }
 
-        public double getBalance() 
-        {
-            return balance;
-        }
+
     }
 }
