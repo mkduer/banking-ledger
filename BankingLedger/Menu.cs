@@ -23,10 +23,19 @@ namespace BankingLedger
             return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
         }
 
+        public static void Exit()
+        {
+            _exitProgram();
+        }
 
-        public static void Goodbye_TooManyInvalidKeyPresses()
+        public static void Exit_TooManyInvalidKeyPresses()
         {
             Console.WriteLine("Too many invalid selections were made. Goodbye!");
+            _exitProgram();
+        }
+
+        private static void _exitProgram()
+        {
             Environment.Exit(1);
         }
     }
