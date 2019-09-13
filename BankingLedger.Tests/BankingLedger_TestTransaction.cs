@@ -9,7 +9,7 @@ namespace BankingLedger.UnitTests
         [InlineData(-924.00, "withdrawal")]
         public void CreateNewTransaction_CorrectValues(double amount, string type)
         {
-            Transaction activity = new Transaction(amount, type);
+            Transaction activity = new Transaction() { Amount = amount, Type = type };
             Assert.Equal(amount, activity.Amount);
             Assert.Equal(type, activity.Type);
         }
