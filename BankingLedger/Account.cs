@@ -35,6 +35,12 @@ namespace BankingLedger
             return _deposit(amount);
         }
 
+        // wrapper: withdraw the parameterized amount from the balance
+        public bool withdraw(double amount)
+        {
+            return _withdraw(amount);
+        }
+
         // display the resulting balance
         public void viewBalance() 
         {
@@ -51,6 +57,20 @@ namespace BankingLedger
 
             this._balance += amount;
             this._recordTransaction(amount, "deposit");
+            return true;
+        }
+
+        // withdraw the parameterized amount from the balance
+        // and record the transaction in the ledger
+        // note: the amount value must be negative
+        private bool _withdraw(double amount)
+        {
+            if (amount >= 0) {
+                return false;
+            }
+
+            this._balance += amount;
+            this._recordTransaction(amount, "withdraw");
             return true;
         }
 
