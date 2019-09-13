@@ -44,16 +44,21 @@ namespace BankingLedger
         // display the resulting balance
         public void displayBalance() 
         {
-            Console.WriteLine(this.Balance);
+            Console.WriteLine($"{this.Balance:C}");
         }
 
         // display the transactions
         public void displayTransactions()
         {
+            Console.WriteLine("===========================");
             Ledger.ForEach(delegate(Transaction transaction)
             {
-                Console.WriteLine(transaction);
+                Console.WriteLine($"{transaction.Type, -10} {transaction.Amount, 15:C}");
             });
+            Console.WriteLine("---------------------------");
+            Console.Write("Current Balance: ");
+            this.displayBalance();
+            Console.WriteLine("===========================");
         }
 
         // deposit the parameterized amount into the balance
