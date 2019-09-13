@@ -50,15 +50,21 @@ namespace BankingLedger
         // display the transactions
         public void displayTransactions()
         {
-            Console.WriteLine("===========================");
+            int repeat = 50;
+            String transactionBorder = new String('=', repeat);
+            String totalBorder = new String('-', repeat);
+            Console.WriteLine(transactionBorder);
             Ledger.ForEach(delegate(Transaction transaction)
             {
-                Console.WriteLine($"{transaction.Type, -10} {transaction.Amount, 15:C}");
+                if (this._convertUTCtoLocalSystem(transaction.Timestamp) != null) {
+                    Console.WriteLine($"{this._convertUTCtoLocalSystem(transaction.Timestamp), -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
+                } else {
+                    Console.WriteLine($"(UTC) {transaction.Timestamp, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
+                }
             });
-            Console.WriteLine("---------------------------");
-            Console.Write("Current Balance: ");
-            this.displayBalance();
-            Console.WriteLine("===========================");
+            Console.WriteLine(totalBorder);
+            Console.WriteLine($"Current Balance: {Balance, 33:C}");
+            Console.WriteLine(transactionBorder);
         }
 
         // deposit the parameterized amount into the balance
@@ -91,6 +97,8 @@ namespace BankingLedger
         // record the transaction in the ledger
         private bool _recordTransaction(double amount, string type)
         {
+            DateTime timestamp = DateTime.UtcNow;
+
             if (amount <= 0) {
                 return false;
             }
@@ -98,8 +106,20 @@ namespace BankingLedger
             if (type == "withdraw") {
                 amount *= -1;
             }
-            this._ledger.Add(new Transaction() { Amount = amount, Type = type });
+            this._ledger.Add(new Transaction() { Timestamp = timestamp, Amount = amount, Type = type });
             return true;
+        }
+
+        // convert UTC time over to the user's local (system) time
+        private DateTime? _convertUTCtoLocalSystem(DateTime timestamp)
+        {
+            if (timestamp == null) {
+                return null;
+            }
+            // resource: https://stackoverflow.com/questions/12937968/converting-utc-datetime-to-local-datetime/12938028
+            DateTime timestampKindSpecific = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
+            DateTime localTimestamp = timestampKindSpecific.ToLocalTime();
+            return localTimestamp;
         }
     }
 }
