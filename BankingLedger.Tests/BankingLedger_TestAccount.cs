@@ -23,7 +23,7 @@ namespace BankingLedger.UnitTests
         [InlineData(10)]
         [InlineData(746123484486.23498725)]
         [InlineData(999999999999.99999999)]
-        public void DepositMoney_BalanceIncreases(double money)
+        public void TestValidDeposit_CorrectBalanceIncrease(double money)
         {
             Account account = new Account();
             account.deposit(money);
@@ -32,7 +32,7 @@ namespace BankingLedger.UnitTests
 
         [Theory]
         [InlineData(-100.00)]
-        public void InvalidNegativeDeposit_BalanceRemainsZero(double money)
+        public void TestInvalidNegativeDeposit_BalanceRemainsZero(double money)
         {
             Account account = new Account();
             account.deposit(money);
