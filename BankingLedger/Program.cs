@@ -7,8 +7,8 @@ namespace BankingLedger
         static void Main(string[] args)
         {
             User user = new User();
-            user.FirstName = "Constantina";
-            user.LastName = "Random";
+            user.FirstName = "RandomFirstName";
+            user.LastName = "RandomLastName";
             Console.WriteLine($"Hello {user.FirstName} {user.LastName}!");
         }
     }
