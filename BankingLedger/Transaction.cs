@@ -18,11 +18,5 @@ namespace BankingLedger
             get { return _type; }
             set { _type = value; }
         }
-
-        public Transaction(double amount, string type)
-        {
-            Amount = amount;
-            Type = type;
-        }
     }
 }

@@ -10,11 +10,17 @@ namespace BankingLedger
     {
         private double _balance;
 
-        private List<Transaction> _ledger;
-
-        public double Balance {
+        public double Balance
+        {
             get { return _balance; }
             set { _balance = value; }
+        }
+
+        private List<Transaction> _ledger;
+
+        public List<Transaction> Ledger
+        {
+            get { return _ledger; }
         }
 
         public Account(double startingBalance = 0) 
@@ -30,7 +36,8 @@ namespace BankingLedger
         }
 
         // display the resulting balance
-        public void viewBalance() {
+        public void viewBalance() 
+        {
             Console.WriteLine($"BALANCE: ${Balance}");  // TODO: check that this value updates correctly 
         }
 
@@ -38,7 +45,7 @@ namespace BankingLedger
         // and record the transaction in the ledger
         private bool _deposit(double amount)
         {
-            if (amount < 0) {
+            if (amount <= 0) {
                 return false;
             }
 
@@ -50,15 +57,11 @@ namespace BankingLedger
         // record the transaction in the ledger
         private bool _recordTransaction(double amount, string type)
         {
-            if ((type == "deposit" && amount < 0) || (type == "withdrawal" && amount > 0)) {
+            if (amount == 0 || (type == "deposit" && amount < 0) || (type == "withdrawal" && amount > 0)) {
                 return false;
             }
 
-            Transaction activity = new Transaction(amount, type);
-
-            // TODO: add transaction to ledger
-            Console.WriteLine("Need to implement adding transaction");
-
+            this._ledger.Add(new Transaction() { Amount = amount, Type = type });
             return true;
         }
     }
