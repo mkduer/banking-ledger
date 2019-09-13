@@ -1,4 +1,5 @@
 using Xunit;
+using System;
 
 namespace BankingLedger.UnitTests
 {
@@ -9,7 +10,9 @@ namespace BankingLedger.UnitTests
         [InlineData(-924.00, "withdrawal")]
         public void CreateNewTransaction_CorrectValues(double amount, string type)
         {
-            Transaction activity = new Transaction() { Amount = amount, Type = type };
+            DateTime timestamp = DateTime.UtcNow;
+            Transaction activity = new Transaction() { Timestamp = timestamp, Amount = amount, Type = type };
+            Assert.Equal(timestamp, activity.Timestamp);
             Assert.Equal(amount, activity.Amount);
             Assert.Equal(type, activity.Type);
         }
