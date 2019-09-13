@@ -79,7 +79,7 @@ namespace BankingLedger.UnitTests
 
         [Theory]
         [InlineData(15.50, "deposit")]
-        public void TestRecordTransaction_CorrectLedgerAfterDeposit(double amount, string type)
+        public void TestRecordTransaction_CorrectLedgerAfterSingleDeposit(double amount, string type)
         {
             Account account = new Account();
             account.deposit(amount);
@@ -89,7 +89,7 @@ namespace BankingLedger.UnitTests
 
         [Theory]
         [InlineData(-29.89, "withdraw")]
-        public void TestRecordTransaction_CorrectLedgerAfterWithdrawal(double amount, string type)
+        public void TestRecordTransaction_CorrectLedgerAfterSingleWithdrawal(double amount, string type)
         {
             Account account = new Account(500);
             account.withdraw(amount);
@@ -98,9 +98,45 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(0, "deposit")]
-        [InlineData(-210, "deposit")]
-        public void TestInvalidRecordTransactionWithDeposit_EmptyLedger(double amount, string type)
+        [InlineData(1.15, 3001.05, 25.00)]
+        public void TestRecordTransaction_CorrectLedgerAfterMultipleDeposits(params double[] amounts)
+        {
+            string type = "deposit";
+            Account account = new Account();
+            Array.ForEach(amounts, amount => 
+                account.deposit(amount)
+            );
+
+            int i = 0;
+            foreach (double amount in amounts) {
+                Assert.Equal(amount, account.Ledger[i].Amount);
+                Assert.Equal(type, account.Ledger[i].Type);
+                i += 1;
+            }
+        }
+
+        [Theory]
+        [InlineData(-5.25, -155.05, -0.01)]
+        public void TestRecordTransaction_CorrectLedgerAfterMultipleWithdrawals(params double[] amounts)
+        {
+            string type = "withdraw";
+            Account account = new Account(500);
+            Array.ForEach(amounts, amount => 
+                account.withdraw(amount)
+            );
+
+            int i = 0;
+            foreach (double amount in amounts) {
+                Assert.Equal(amount, account.Ledger[i].Amount);
+                Assert.Equal(type, account.Ledger[i].Type);
+                i += 1;
+            }
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-210)]
+        public void TestInvalidRecordTransactionWithDeposit_EmptyLedger(double amount)
         {
             Account account = new Account();
             account.deposit(amount);
@@ -108,9 +144,9 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(45.23, "withdraw")]
-        [InlineData(0, "withdraw")]
-        public void TestInvalidRecordTransactionWithWithdrawal_EmptyLedger(double amount, string type)
+        [InlineData(45.23)]
+        [InlineData(0)]
+        public void TestInvalidRecordTransactionWithWithdrawal_EmptyLedger(double amount)
         {
             Account account = new Account();
             account.withdraw(amount);
