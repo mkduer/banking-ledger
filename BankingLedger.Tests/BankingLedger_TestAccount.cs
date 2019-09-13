@@ -21,7 +21,7 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(145, -45)]
+        [InlineData(145, 45)]
         public void TestViewBalance_CorrectBalanceValue(double depositAmount, double withdrawAmount)
         {
             Account account = new Account();
@@ -31,7 +31,7 @@ namespace BankingLedger.UnitTests
             Assert.Equal(depositAmount, account.Balance);
 
             account.withdraw(withdrawAmount);
-            Assert.Equal(depositAmount + withdrawAmount, account.Balance);
+            Assert.Equal(depositAmount - withdrawAmount, account.Balance);
         }
 
         [Theory]
@@ -48,7 +48,7 @@ namespace BankingLedger.UnitTests
 
         [Theory]
         [InlineData(-100.00)]
-        public void TestInvalidNegativeDeposit_BalanceRemainsZero(double amount)
+        public void TestInvalidNegativeDepositValue_BalanceRemainsZero(double amount)
         {
             Account account = new Account();
             account.deposit(amount);
@@ -57,20 +57,20 @@ namespace BankingLedger.UnitTests
 
         [Theory]
         [InlineData(0)]
-        [InlineData(-98)]
-        [InlineData(-746123484486.23498725)]
-        [InlineData(-999999999999.99999999)]
+        [InlineData(98)]
+        [InlineData(746123484486.23498725)]
+        [InlineData(999999999999.99999999)]
         public void TestValidWithdrawal_CorrectBalanceDecrease(double amount)
         {
             double expected = 10;
-            Account account = new Account((amount * -1) + expected);
+            Account account = new Account(amount + expected);
             account.withdraw(amount);
             Assert.Equal(expected, account.Balance);
         }
 
         [Theory]
-        [InlineData(25.00)]
-        public void TestInvalidPositiveWithdrawal_BalanceRemainsZero(double amount)
+        [InlineData(-25.00)]
+        public void TestInvalidNegativeWithdrawalValue_BalanceRemainsZero(double amount)
         {
             Account account = new Account();
             account.withdraw(amount);
@@ -88,12 +88,12 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(-29.89, "withdraw")]
+        [InlineData(29.89, "withdraw")]
         public void TestRecordTransaction_CorrectLedgerAfterSingleWithdrawal(double amount, string type)
         {
             Account account = new Account(500);
             account.withdraw(amount);
-            Assert.Equal(amount, account.Ledger[0].Amount);
+            Assert.Equal((amount * -1), account.Ledger[0].Amount);
             Assert.Equal(type, account.Ledger[0].Type);
         }
 
@@ -116,7 +116,7 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(-5.25, -155.05, -0.01)]
+        [InlineData(5.25, 155.05, 0.01)]
         public void TestRecordTransaction_CorrectLedgerAfterMultipleWithdrawals(params double[] amounts)
         {
             string type = "withdraw";
@@ -127,7 +127,7 @@ namespace BankingLedger.UnitTests
 
             int i = 0;
             foreach (double amount in amounts) {
-                Assert.Equal(amount, account.Ledger[i].Amount);
+                Assert.Equal((amount * -1), account.Ledger[i].Amount);
                 Assert.Equal(type, account.Ledger[i].Type);
                 i += 1;
             }
@@ -144,7 +144,7 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(45.23)]
+        [InlineData(-45.23)]
         [InlineData(0)]
         public void TestInvalidRecordTransactionWithWithdrawal_EmptyLedger(double amount)
         {
