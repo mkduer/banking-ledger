@@ -29,12 +29,6 @@ namespace BankingLedger
             return _deposit(amount);
         }
 
-        // wrapper: add the new transaction into the ledger
-        public bool addTransaction(Transaction activity)
-        {
-            return _addTransaction(activity);
-        }
-
         // display the resulting balance
         public void viewBalance() {
             Console.WriteLine($"BALANCE: ${Balance}");  // TODO: check that this value updates correctly 
@@ -56,23 +50,15 @@ namespace BankingLedger
         // record the transaction in the ledger
         private bool _recordTransaction(double amount, string type)
         {
-            if (amount < 0) {
+            if ((type == "deposit" && amount < 0) || (type == "withdrawal" && amount > 0)) {
                 return false;
             }
+
             Transaction activity = new Transaction(amount, type);
 
-            return true;
-        }
-
-        // add the new transaction into the ledger
-        private bool _addTransaction(Transaction activity)
-        {
-            if (activity == null) {
-                return false;
-            }
-
-            // TODO: add transaction 
+            // TODO: add transaction to ledger
             Console.WriteLine("Need to implement adding transaction");
+
             return true;
         }
     }
