@@ -42,9 +42,18 @@ namespace BankingLedger
         }
 
         // display the resulting balance
-        public void viewBalance() 
+        public void displayBalance() 
         {
-            Console.WriteLine($"BALANCE: ${Balance}");  // TODO: check that this value updates correctly 
+            Console.WriteLine(this.Balance);
+        }
+
+        // display the transactions
+        public void displayTransactions()
+        {
+            Ledger.ForEach(delegate(Transaction transaction)
+            {
+                Console.WriteLine(transaction);
+            });
         }
 
         // deposit the parameterized amount into the balance
@@ -62,14 +71,14 @@ namespace BankingLedger
 
         // withdraw the parameterized amount from the balance
         // and record the transaction in the ledger
-        // note: the amount value must be negative
+        // note: amount must be a positive value
         private bool _withdraw(double amount)
         {
-            if (amount >= 0) {
+            if (amount <= 0) {
                 return false;
             }
 
-            this._balance += amount;
+            this._balance -= amount;
             this._recordTransaction(amount, "withdraw");
             return true;
         }
@@ -77,10 +86,13 @@ namespace BankingLedger
         // record the transaction in the ledger
         private bool _recordTransaction(double amount, string type)
         {
-            if (amount == 0 || (type == "deposit" && amount < 0) || (type == "withdrawal" && amount > 0)) {
+            if (amount <= 0) {
                 return false;
             }
 
+            if (type == "withdraw") {
+                amount *= -1;
+            }
             this._ledger.Add(new Transaction() { Amount = amount, Type = type });
             return true;
         }
