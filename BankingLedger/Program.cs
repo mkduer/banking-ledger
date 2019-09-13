@@ -6,18 +6,15 @@ namespace BankingLedger
     {
         static void Main(string[] args)
         {
-            User user = new User();
-            user.FirstName = "RandomFirstName";
-            user.LastName = "RandomLastName";
-            Console.WriteLine($"Hello {user.FirstName} {user.LastName}!");
+            ConsoleKey[] validOptions = Menu.WelcomeMenu();
+            ConsoleKey selection = Console.ReadKey(true).Key;
 
-            Account account = new Account();
-            account.deposit(500);
-            account.withdraw(250);
-            account.withdraw(50);
-            account.withdraw(5);
-            account.deposit(500);
-            account.displayTransactions();
+            Console.WriteLine($"user selected {selection}");
+            if (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == true) {
+                Console.WriteLine($"{selection} is in validOptions");
+            }
+
+
         }
     }
 }
