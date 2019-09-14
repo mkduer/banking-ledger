@@ -8,6 +8,7 @@ namespace BankingLedger
         {
             int promptCount = 1;
             int maxPrompt = 5;
+            User user = new User();
 
             // Welcome user
             Menu.WelcomeMessage();
@@ -32,10 +33,19 @@ namespace BankingLedger
             // Handle user's selection
             switch (selection) {
                 case ConsoleKey.D1:
-                    Console.WriteLine("selected option 1");
+                    // User wants to login
+                    Console.WriteLine("Login");
                     break;
                 case ConsoleKey.D2:
-                    Console.WriteLine("selected option 2");
+                    // User wants to create account
+                    Console.WriteLine("Create Account");
+                    if (!user.createUserAccount()) {
+                        Console.Clear();
+                        Console.WriteLine($"There were unfortunately issues creating your account. Please contact support at super secret number for further help");
+                    } else {
+                        Console.Clear();
+                        Console.WriteLine($"Your account was created successfully {user.UserID}");
+                    }
                     break;
                 default:
                     Menu.Exit();
