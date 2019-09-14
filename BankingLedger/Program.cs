@@ -44,7 +44,10 @@ namespace BankingLedger
                         Console.WriteLine($"There were unfortunately issues creating your account. Please contact support at super secret number for further help");
                     } else {
                         Console.Clear();
-                        Console.WriteLine($"Your account was created successfully {user.UserID}");
+                        Console.WriteLine($"Your account was created successfully\n");
+                        Console.WriteLine("ACCOUNT DETAILS:");
+                        Console.WriteLine($"Username: {user.UserID}");
+                        Console.WriteLine($"Name: {user.FirstName} {user.LastName}");
                     }
                     break;
                 default:
