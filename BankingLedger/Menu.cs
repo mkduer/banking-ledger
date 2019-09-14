@@ -15,7 +15,7 @@ namespace BankingLedger
         // A welcome menu that returns valid key stroke options
         public static ConsoleKey[] WelcomeMenu()
         {
-            Console.WriteLine("Please select from the following options:");
+            Console.WriteLine("\nPlease select from the following options:");
             Console.WriteLine("(1) Login");
             Console.WriteLine("(2) Create Account");
             Console.WriteLine("(Esc) Exit Program");

@@ -1,6 +1,5 @@
 using System;
 using System.Security.Cryptography;
-using System.ComponentModel;
 using System.Text;
 
 namespace BankingLedger
@@ -43,100 +42,146 @@ namespace BankingLedger
             _account = new Account();
         }
 
-        public bool createUserAccount()
+        // Create details for new user
+        public bool createUser()
         {
             Console.Clear();
             Console.WriteLine("Let's create your account.");
-            return _createUserID() && _createRealName() && _createPassword();
+            return promptUserID() && promptRealName() && promptPassword();
         }
 
-        // create user ID
-        private bool _createUserID()
+        // prompt for user ID
+        public bool promptUserID()
         {
             char confirmation = 'N';
             string response = "";
+            string id = "";
 
             while (!confirmation.Equals('Y')) {
                 Console.WriteLine("\nPlease create a username:");
-                UserID = Console.ReadLine();
+                id = Console.ReadLine();
 
-                Console.WriteLine($"Is {UserID} the correct username? (y/n)");
+                if (!this._createUserID(id)) {
+                    return false;
+                }
+
+                Console.WriteLine($"Is {id} the correct username? (y/n)");
                 response = Console.ReadLine().ToUpper();
                 confirmation = response[0];
             }
 
-            if (UserID == "" || UserID == null) {
+            return true;
+        }
+
+        // create user ID
+        private bool _createUserID(string id)
+        {
+            if (id == "" || id == null) {
                 return false;
+            }
+            UserID = id;
+            return true;
+        }
+
+        // Prompt for first and last names
+        public bool promptRealName()
+        {
+            char confirmation = 'N';
+            string response = "";
+            string first = "";
+            string last = "";
+
+            while (!confirmation.Equals('Y')) {
+                Console.Clear();
+                Console.WriteLine("\nEnter your first name:");
+                first = Console.ReadLine();
+                Console.WriteLine("Enter your last name:");
+                last = Console.ReadLine();
+
+                if (!_createRealName(first, last)) {
+                    return false;
+                }
+
+                Console.WriteLine($"Is {first} {last} correct? (y/n)");
+                response = Console.ReadLine().ToUpper();
+                confirmation = response[0];
             }
             return true;
         }
 
         // Create first and last names
-        private bool _createRealName()
+        private bool _createRealName(string first, string last)
         {
-            char confirmation = 'N';
-            string response = "";
-
-            while (!confirmation.Equals('Y')) {
-                Console.Clear();
-                Console.WriteLine("\nEnter your first name:");
-                FirstName = Console.ReadLine();
-                Console.WriteLine("Enter your last name:");
-                LastName = Console.ReadLine();
-
-                Console.WriteLine($"Is {FirstName} {LastName} correct? (y/n)");
-                response = Console.ReadLine().ToUpper();
-                confirmation = response[0];
+            if (first == "" || first == null || last == "" || last == null) {
+                return false;
             }
+            FirstName = first;
+            LastName = last;
+            return true;
+        }
 
-            if (FirstName == "" || FirstName == null || LastName == "" || LastName == null) {
+        // Prompt for password
+        public bool promptPassword()
+        {
+            string temp = "";
+            int prompt = 0;
+            int maxPrompt = 5;
+
+            // Ensure the password is set and within the maximum prompts allowed
+            Console.Clear();
+            Console.WriteLine("\nEnter your password (minimum 8 characters):");
+
+            while (prompt < maxPrompt && !this._createPassword(ref temp)) {
+                prompt++;
+                Console.WriteLine("\nEnter your password (minimum 8 characters):");
+            }
+            return this._createHashSalt(ref temp);
+        }
+
+        // Create a temp password
+        private bool _createPassword(ref string temp)
+        {
+            ConsoleKeyInfo key;
+
+            // Create a valid password allowing for a maximum of characters, symbols, numbers
+            // this could be modified to not include invalid ascii values
+            do {
+                key = Console.ReadKey(true);
+
+                if ((int) key.Key > 31 && (int) key.Key < 127) {
+                    temp += key.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key.Key != ConsoleKey.Enter);
+
+            if (temp.Length < 8 || temp == "" || temp == null) {
                 return false;
             }
             return true;
         }
 
-        // Create a password
-        private bool _createPassword()
+        // Create hash and salt
+        private bool _createHashSalt(ref string temp)
         {
-            string temp = null;
-            int prompt = 0;
-            int maxPrompt = 5;
             int iterations = 3000;
-            ConsoleKeyInfo key;
+            byte[] randSalt = new byte[16];
+            byte[] hashBytes = new byte[39];
 
-            // Ensure the password is set and within the maximum prompts allowed
-            while (prompt < maxPrompt) {
-
-                while (temp == null || temp.Length < 8) {
-
-                    // Create a valid password allowing for a maximum of characters, symbols, numbers
-                    // this could be modified to not include invalid ascii values
-                    Console.Clear();
-                    Console.WriteLine("\nEnter your password (minimum 8 characters):");
-                    do {
-                        key = Console.ReadKey(true);
-
-                        if ((int) key.Key > 31 && (int) key.Key < 127) {
-                            temp += key.KeyChar;
-                            Console.Write("*");
-                        }
-                    } while (key.Key != ConsoleKey.Enter);
-                }
-
-                // Create hash and salt
-                RNGCryptoServiceProvider randCSP = new RNGCryptoServiceProvider();
-                byte[] randSalt = new byte[16];
-                randCSP.GetBytes(randSalt);
-                var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(temp), randSalt, iterations, HashAlgorithmName.SHA256);
-                byte[] hash = derived.GetBytes(23);
-
-                byte[] hashBytes = new byte[39];
-                Array.Copy(randSalt, 0, hashBytes, 0, 16);
-                Array.Copy(hash, 0, hashBytes, 16, 23);
-                _secureHash = Convert.ToBase64String(hashBytes);
-                return true;
+            if (temp == "" || temp == null) {
+                return false;
             }
-            return false;
+
+            // Create hash and salt
+            RNGCryptoServiceProvider randCSP = new RNGCryptoServiceProvider();
+            randCSP.GetBytes(randSalt);
+            var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(temp), randSalt, iterations, HashAlgorithmName.SHA256);
+            byte[] hash = derived.GetBytes(23);
+
+            Array.Copy(randSalt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 23);
+            _secureHash = Convert.ToBase64String(hashBytes);
+
+            return true;
         }
     }
 }
