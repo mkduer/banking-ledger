@@ -8,6 +8,7 @@ namespace BankingLedger
         // A welcome message
         public static void WelcomeMessage()
         {
+            Console.Clear();
             Console.WriteLine("\nWelcome to the Most Amazing Bank!\n");
         }
 
@@ -23,10 +24,22 @@ namespace BankingLedger
             return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
         }
 
+        // wrapper: exit program
+        public static void Exit()
+        {
+            _exitProgram();
+        }
 
-        public static void Goodbye_TooManyInvalidKeyPresses()
+        // exit program due to too many invalid key presses
+        public static void Exit_TooManyInvalidKeyPresses()
         {
             Console.WriteLine("Too many invalid selections were made. Goodbye!");
+            _exitProgram();
+        }
+
+        // exit program
+        private static void _exitProgram()
+        {
             Environment.Exit(1);
         }
     }
