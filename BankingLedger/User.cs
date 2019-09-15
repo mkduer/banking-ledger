@@ -46,6 +46,12 @@ namespace BankingLedger
             _checking = new Account();
         }
 
+        // user makes a withdrawal
+        public void viewTransactions()
+        {
+            _checking.displayTransactions();
+        }
+
         public void checkBalance()
         {
             Console.Write($"Your balance is ");
