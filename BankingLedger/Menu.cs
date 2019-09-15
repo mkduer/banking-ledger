@@ -35,9 +35,10 @@ namespace BankingLedger
             Console.WriteLine("(2) Withdrawal");
             Console.WriteLine("(3) Check Balance");
             Console.WriteLine("(4) View Recent Transactions");
-            Console.WriteLine("(Esc) Exit Program");
+            Console.WriteLine("(5) Logout\n");
 
-            return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.D3, ConsoleKey.D4, ConsoleKey.Escape};
+            return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.D3, 
+                                     ConsoleKey.D4, ConsoleKey.D5, ConsoleKey.Escape};
         }
 
         // increment prompt count
