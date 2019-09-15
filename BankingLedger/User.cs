@@ -6,6 +6,9 @@ namespace BankingLedger
 {
     public class User
     {
+        private const int _BYTESIZE = 8;
+        private const int _MAXBYTESIZE = 12;
+        private const int _ITERATIONS = 3000;
         private string _userID;
 
         public string UserID
@@ -42,6 +45,38 @@ namespace BankingLedger
             _account = new Account();
         }
 
+        // login user if valid
+        public bool login()
+        {
+            string id = "";
+            string temp = "";
+            ConsoleKeyInfo key;
+
+            Console.WriteLine("\nEnter your username:");
+            id = Console.ReadLine();
+
+            if (!this._validateUser(ref id)) {
+                Console.WriteLine("The entered username does not exist");
+                return false;
+            }
+
+            Console.WriteLine("\nEnter your password:");
+            do {
+                key = Console.ReadKey(true);
+
+                if ((int) key.Key > 31 && (int) key.Key < 127) {
+                    temp += key.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key.Key != ConsoleKey.Enter);
+
+            if (!this._validatePassword(ref temp)) {
+                Console.WriteLine("Invalid Password");
+                return false;
+            }
+            return true;
+        }
+
         // create details for new user
         public bool createUser()
         {
@@ -73,16 +108,6 @@ namespace BankingLedger
             return true;
         }
 
-        // create user ID
-        private bool _createUserID(string id)
-        {
-            if (id == "" || id == null) {
-                return false;
-            }
-            UserID = id;
-            return true;
-        }
-
         // prompt for first and last names
         public bool promptRealName()
         {
@@ -109,19 +134,6 @@ namespace BankingLedger
             return true;
         }
 
-        // create first and last names
-        private bool _createRealName(string first, string last)
-        {
-            if (first == "" || first == null || last == "" || last == null) {
-                return false;
-            }
-
-            FirstName = first;
-            LastName = last;
-
-            return true;
-        }
-
         // prompt for password
         public bool promptPassword()
         {
@@ -140,6 +152,61 @@ namespace BankingLedger
             return this._createHashSalt(ref temp);
         }
 
+        // validate that username matches
+        private bool _validateUser(ref string id)
+        {
+            return id == this.UserID;
+        }
+
+        // validate password
+        private bool _validatePassword(ref string temp)
+        {
+            // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
+            // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
+            if (string.IsNullOrEmpty(temp)) {
+                return false;
+            }
+
+            byte[] hashBytes = Convert.FromBase64String(_secureHash);
+            byte[] salt = new byte[_BYTESIZE];
+            Array.Copy(hashBytes, 0, salt, 0, _BYTESIZE);
+
+            // Hash provided password
+            var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(temp), salt, _ITERATIONS, HashAlgorithmName.SHA256);
+            byte[] hash = derived.GetBytes(_MAXBYTESIZE);
+
+            for (int i = 0; i < _BYTESIZE; i++) {
+                if (hashBytes[i + _BYTESIZE] != hash[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // create user ID
+        private bool _createUserID(string id)
+        {
+            if (string.IsNullOrEmpty(id)) {
+                return false;
+            }
+            this.UserID = id;
+            return true;
+        }
+
+
+        // create first and last names
+        private bool _createRealName(string first, string last)
+        {
+            if (string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) {
+                return false;
+            }
+
+            this.FirstName = first;
+            this.LastName = last;
+
+            return true;
+        }
+
         // create a temp password
         private bool _createPassword(ref string temp)
         {
@@ -156,7 +223,7 @@ namespace BankingLedger
                 }
             } while (key.Key != ConsoleKey.Enter);
 
-            if (temp.Length < 8 || temp == "" || temp == null) {
+            if (temp.Length < 8 || string.IsNullOrEmpty(temp)) {
                 return false;
             }
             return true;
@@ -165,23 +232,24 @@ namespace BankingLedger
         // create hash and salt
         private bool _createHashSalt(ref string temp)
         {
-            int iterations = 3000;
-            byte[] randSalt = new byte[16];
-            byte[] hashBytes = new byte[39];
+            // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
+            // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
+            byte[] randSalt = new byte[_BYTESIZE];
+            byte[] hashBytes = new byte[_BYTESIZE + _MAXBYTESIZE];
 
-            if (temp == "" || temp == null) {
+            if (string.IsNullOrEmpty(temp)) {
                 return false;
             }
 
             // Create hash and salt
             RNGCryptoServiceProvider randCSP = new RNGCryptoServiceProvider();
             randCSP.GetBytes(randSalt);
-            var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(temp), randSalt, iterations, HashAlgorithmName.SHA256);
-            byte[] hash = derived.GetBytes(23);
+            var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(temp), randSalt, _ITERATIONS, HashAlgorithmName.SHA256);
+            byte[] hash = derived.GetBytes(_MAXBYTESIZE);
 
-            Array.Copy(randSalt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 23);
-            _secureHash = Convert.ToBase64String(hashBytes);
+            Array.Copy(randSalt, 0, hashBytes, 0, _BYTESIZE);
+            Array.Copy(hash, 0, hashBytes, _BYTESIZE, _MAXBYTESIZE);
+            this._secureHash = Convert.ToBase64String(hashBytes);
 
             return true;
         }
