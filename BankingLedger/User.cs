@@ -42,7 +42,7 @@ namespace BankingLedger
             _account = new Account();
         }
 
-        // Create details for new user
+        // create details for new user
         public bool createUser()
         {
             Console.Clear();
@@ -83,7 +83,7 @@ namespace BankingLedger
             return true;
         }
 
-        // Prompt for first and last names
+        // prompt for first and last names
         public bool promptRealName()
         {
             char confirmation = 'N';
@@ -109,18 +109,20 @@ namespace BankingLedger
             return true;
         }
 
-        // Create first and last names
+        // create first and last names
         private bool _createRealName(string first, string last)
         {
             if (first == "" || first == null || last == "" || last == null) {
                 return false;
             }
+
             FirstName = first;
             LastName = last;
+
             return true;
         }
 
-        // Prompt for password
+        // prompt for password
         public bool promptPassword()
         {
             string temp = "";
@@ -138,7 +140,7 @@ namespace BankingLedger
             return this._createHashSalt(ref temp);
         }
 
-        // Create a temp password
+        // create a temp password
         private bool _createPassword(ref string temp)
         {
             ConsoleKeyInfo key;
@@ -160,7 +162,7 @@ namespace BankingLedger
             return true;
         }
 
-        // Create hash and salt
+        // create hash and salt
         private bool _createHashSalt(ref string temp)
         {
             int iterations = 3000;

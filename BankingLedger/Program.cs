@@ -14,9 +14,8 @@ namespace BankingLedger
             // Welcome user
             Menu.WelcomeMessage();
 
-            // Provide welcome menu options and check for valid selection
-
-            // Show menu until user exits the program
+            // Provide welcome menu options and check for valid selection, 
+            // until program is exited
             while (!exit) {
                 ConsoleKey[] validOptions = Menu.WelcomeMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
@@ -55,6 +54,7 @@ namespace BankingLedger
                         }
                         break;
                     default:
+                        Console.WriteLine("Exit Program");
                         exit = true;
                         Menu.Exit();
                         break;
