@@ -80,6 +80,18 @@ namespace BankingLedger
                 }
             } while (!valid && promptCount <= maxPrompt);
 
+            if (_checking.Balance - amountFormatted < 0) {
+                Console.WriteLine($"\nWithdrawing {amountFormatted:C} will overdraw your account.");
+                Console.WriteLine("Would you like to continue with the withdrawal? (y/n)");
+                string response = Console.ReadLine().ToUpper();
+                char confirmation = response[0];
+
+                if (!confirmation.Equals('Y')) {
+                    Console.WriteLine("\nTransaction Cancelled");
+                    return false;
+                }
+            }
+
             return _checking.withdraw(amountFormatted);
         }
 
