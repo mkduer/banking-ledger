@@ -37,14 +37,19 @@ namespace BankingLedger
                 switch (selection) {
                     case ConsoleKey.D1:
                         // User wants to login
-                        Console.WriteLine("Login");
+                        Console.WriteLine("User Login");
+                        if (!user.login()) {
+                            Console.WriteLine($"\nThere were unfortunately issues creating your account. Please contact support at super secret number for further help");
+                        } else {
+                            Console.Clear();
+                            Console.WriteLine($"Credentials Verified. Welcome {user.UserID}!");
+                        }
                         break;
                     case ConsoleKey.D2:
                         // User wants to create account
                         Console.WriteLine("Create Account");
                         if (!user.createUser()) {
-                            Console.Clear();
-                            Console.WriteLine($"There were unfortunately issues creating your account. Please contact support at super secret number for further help");
+                            Console.WriteLine($"\nThere were unfortunately issues creating your account. Please contact support at super secret number for further help");
                         } else {
                             Console.Clear();
                             Console.WriteLine($"Your account was created successfully\n");
