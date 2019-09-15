@@ -51,7 +51,8 @@ namespace BankingLedger
                         // User wants to create account
                         Console.WriteLine("Create Account");
                         if (!user.createUser()) {
-                            Console.WriteLine($"\nThere were unfortunately issues creating your account. Please contact support at super secret number for further help");
+                            Console.WriteLine($"\nYou may try creating an account again, or if you continue to have difficulties");
+                            Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
                             Console.Clear();
                             Console.WriteLine($"Your account was created successfully\n");
