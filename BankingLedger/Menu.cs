@@ -5,6 +5,9 @@ namespace BankingLedger
     // The Menu class prompts the user with menu options
     public static class Menu
     {
+        public static int promptCount { get; set; }
+        public const int LIMIT = 4;
+
         // A welcome message
         public static void WelcomeMessage()
         {
@@ -22,6 +25,31 @@ namespace BankingLedger
             Console.WriteLine("Example: To create an account, you would type 2\n");
 
             return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
+        }
+
+        // A user account menu that returns valid key stroke options
+        public static ConsoleKey[] MainMenu()
+        {
+            Console.WriteLine("\nPlease select from the following options:");
+            Console.WriteLine("(1) Deposit");
+            Console.WriteLine("(2) Withdrawal");
+            Console.WriteLine("(3) Check Balance");
+            Console.WriteLine("(4) View Recent Transactions");
+            Console.WriteLine("(Esc) Exit Program");
+
+            return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.D3, ConsoleKey.D4, ConsoleKey.Escape};
+        }
+
+        // increment prompt count
+        public static void increasePromptCount()
+        {
+            promptCount++;
+        }
+
+        // reset prompt
+        public static void resetPrompt()
+        {
+            promptCount = 0;
         }
 
         // wrapper: exit program
@@ -42,5 +70,7 @@ namespace BankingLedger
         {
             Environment.Exit(1);
         }
+
+
     }
 }
