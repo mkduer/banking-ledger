@@ -6,8 +6,8 @@ namespace BankingLedger
 {
     public class User
     {
-        private const int _BYTESIZE = 8;
-        private const int _MAXBYTESIZE = 12;
+        private const int _BYTESIZE = 16;
+        private const int _MAXBYTESIZE = 23;
         private const int _ITERATIONS = 3000;
         private string _userID;
 
@@ -69,6 +69,7 @@ namespace BankingLedger
                     Console.Write("*");
                 }
             } while (key.Key != ConsoleKey.Enter);
+            Console.WriteLine();
 
             if (!this._verifyPassword(ref temp)) {
                 Console.WriteLine("Invalid Password");
@@ -222,6 +223,7 @@ namespace BankingLedger
                     Console.Write("*");
                 }
             } while (key.Key != ConsoleKey.Enter);
+            Console.WriteLine();
 
             if (temp.Length < 8 || string.IsNullOrEmpty(temp)) {
                 return false;

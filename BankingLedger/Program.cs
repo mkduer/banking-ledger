@@ -39,7 +39,8 @@ namespace BankingLedger
                         // User wants to login
                         Console.WriteLine("User Login");
                         if (!user.login()) {
-                            Console.WriteLine($"\nThere were unfortunately issues creating your account. Please contact support at super secret number for further help");
+                            Console.WriteLine($"\nYou may try logging in again, or if you continue to have difficulties");
+                            Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
                             Console.Clear();
                             Console.WriteLine($"Credentials Verified. Welcome {user.UserID}!");
