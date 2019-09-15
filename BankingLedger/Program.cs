@@ -104,6 +104,11 @@ namespace BankingLedger
                     case ConsoleKey.D2:
                         // User wants to make a withdrawal
                         Console.WriteLine("Make a Withdrawal");
+                        if (!user.makeWithdrawal()) {
+                            Console.WriteLine("The amount was not withdrawn.");
+                        } else {
+                            Console.WriteLine("Your transaction was successful.");
+                        }
                         break;
                     case ConsoleKey.D3:
                         // User wants to check balance
