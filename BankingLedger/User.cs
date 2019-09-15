@@ -35,14 +35,14 @@ namespace BankingLedger
 
         private string _secureHash;
 
-        private Account _account;
+        private Account _checking;
 
         public User() {
             FirstName = "";
             LastName = "";
             UserID = "";
             _secureHash = null;
-            _account = new Account();
+            _checking = new Account();
         }
 
         // login user if valid
