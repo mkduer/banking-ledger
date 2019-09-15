@@ -55,7 +55,7 @@ namespace BankingLedger
             Console.WriteLine("\nEnter your username:");
             id = Console.ReadLine();
 
-            if (!this._validateUser(ref id)) {
+            if (!this._verifyUser(ref id)) {
                 Console.WriteLine("The entered username does not exist");
                 return false;
             }
@@ -70,7 +70,7 @@ namespace BankingLedger
                 }
             } while (key.Key != ConsoleKey.Enter);
 
-            if (!this._validatePassword(ref temp)) {
+            if (!this._verifyPassword(ref temp)) {
                 Console.WriteLine("Invalid Password");
                 return false;
             }
@@ -152,14 +152,14 @@ namespace BankingLedger
             return this._createHashSalt(ref temp);
         }
 
-        // validate that username matches
-        private bool _validateUser(ref string id)
+        // verify that username matches
+        private bool _verifyUser(ref string id)
         {
             return id == this.UserID;
         }
 
-        // validate password
-        private bool _validatePassword(ref string temp)
+        // verify password
+        private bool _verifyPassword(ref string temp)
         {
             // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
             // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
