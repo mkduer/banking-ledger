@@ -52,6 +52,31 @@ namespace BankingLedger
             _checking.displayBalance();
         }
 
+        // user makes a withdrawal
+        public bool makeWithdrawal()
+        {
+            bool valid = false;
+            int promptCount = 0;
+            int maxPrompt = 5;
+            double amountFormatted;
+
+            do {
+                promptCount++;
+                Console.WriteLine("How much do you want to withdraw?");
+                Console.WriteLine("\nExample: 25.00\n");
+                string amount = Console.ReadLine();
+                amountFormatted = formatCurrency(amount);
+
+                if (amountFormatted == (double) -1) {
+                    Console.WriteLine("Invalid value was entered.");
+                } else {
+                    valid = true;
+                }
+            } while (!valid && promptCount <= maxPrompt);
+
+            return _checking.withdraw(amountFormatted);
+        }
+
         // user makes a deposit
         public bool makeDeposit()
         {
@@ -95,7 +120,7 @@ namespace BankingLedger
                 try {
                     formatted = Convert.ToDouble(amountString);
                 } catch (FormatException) {
-                    Console.WriteLine($"Unable to convert '{amountString}' to a double");
+                    Console.WriteLine($"Unable to convert '{amountString}' to a valid transaction value.");
                 } catch (OverflowException) {
                     Console.WriteLine($"{amountString} is outside a double type range");
                 }
