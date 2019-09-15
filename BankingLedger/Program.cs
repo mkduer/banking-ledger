@@ -118,6 +118,7 @@ namespace BankingLedger
                     case ConsoleKey.D4:
                         // User wants to view transactions
                         Console.WriteLine("View transactions");
+                        user.viewTransactions();
                         break;
                     default:
                         Console.WriteLine("Logout");

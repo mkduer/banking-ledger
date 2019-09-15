@@ -50,7 +50,7 @@ namespace BankingLedger
         // display the transactions
         public void displayTransactions()
         {
-            int repeat = 50;
+            int repeat = 52;
             String transactionBorder = new String('=', repeat);
             String totalBorder = new String('-', repeat);
             Console.WriteLine(transactionBorder);
