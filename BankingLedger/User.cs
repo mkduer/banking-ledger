@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BankingLedger
 {
@@ -43,6 +44,63 @@ namespace BankingLedger
             UserID = "";
             _secureHash = null;
             _checking = new Account();
+        }
+
+        public void checkBalance()
+        {
+            Console.Write($"Your balance is ");
+            _checking.displayBalance();
+        }
+
+        // user makes a deposit
+        public bool makeDeposit()
+        {
+            bool valid = false;
+            int promptCount = 0;
+            int maxPrompt = 5;
+            double amountFormatted;
+
+            do {
+                promptCount++;
+                Console.WriteLine("How much do you want to deposit?");
+                Console.WriteLine("\nExample: 25.00\n");
+                string amount = Console.ReadLine();
+                amountFormatted = formatCurrency(amount);
+
+                if (amountFormatted == (double) -1) {
+                    Console.WriteLine("Invalid value was entered.");
+                } else {
+                    valid = true;
+                }
+            } while (!valid && promptCount <= maxPrompt);
+
+            return _checking.deposit(amountFormatted);
+        }
+
+        // format string into currency
+        public double formatCurrency(string amountString)
+        {
+            double formatted = (double) -1;
+            if (string.IsNullOrEmpty(amountString))
+            {
+                return formatted;
+            }
+
+            // Check that the parameter has a valid pattern
+            string pattern = @"^$?\s*\d*.\d*\s*$";
+            Regex regex = new Regex(pattern);
+
+            // If the string is valid, convert to a double
+            if (regex.IsMatch(amountString)) {
+                try {
+                    formatted = Convert.ToDouble(amountString);
+                } catch (FormatException) {
+                    Console.WriteLine($"Unable to convert '{amountString}' to a double");
+                } catch (OverflowException) {
+                    Console.WriteLine($"{amountString} is outside a double type range");
+                }
+            }
+            return formatted;
         }
 
         // login user if valid
@@ -101,7 +159,7 @@ namespace BankingLedger
                     return false;
                 }
 
-                Console.WriteLine($"Is {id} the correct username? (y/n)");
+                Console.WriteLine($"\nIs {id} the correct username? (y/n)");
                 response = Console.ReadLine().ToUpper();
                 confirmation = response[0];
             }
@@ -128,7 +186,7 @@ namespace BankingLedger
                     return false;
                 }
 
-                Console.WriteLine($"Is {first} {last} correct? (y/n)");
+                Console.WriteLine($"\nIs {first} {last} correct? (y/n)");
                 response = Console.ReadLine().ToUpper();
                 confirmation = response[0];
             }

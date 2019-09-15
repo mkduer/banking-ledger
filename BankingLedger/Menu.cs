@@ -22,7 +22,7 @@ namespace BankingLedger
             Console.WriteLine("(1) Login");
             Console.WriteLine("(2) Create Account");
             Console.WriteLine("(Esc) Exit Program");
-            Console.WriteLine("Example: To create an account, you would type 2\n");
+            Console.WriteLine("\nExample: To create an account, you would type 2\n");
 
             return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
         }

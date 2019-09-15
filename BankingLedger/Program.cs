@@ -34,6 +34,7 @@ namespace BankingLedger
                 }
 
                 // Handle user's selection
+                Console.Clear();
                 switch (selection) {
                     case ConsoleKey.D1:
                         // User wants to login
@@ -42,7 +43,6 @@ namespace BankingLedger
                             Console.WriteLine($"\nYou may try logging in again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
-                            Console.Clear();
                             Console.WriteLine($"Credentials Verified.\n");
                             accountMenu = true;
                         }
@@ -54,7 +54,6 @@ namespace BankingLedger
                             Console.WriteLine($"\nYou may try creating an account again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
-                            Console.Clear();
                             Console.WriteLine($"Your account was created successfully\n");
                             Console.WriteLine("ACCOUNT DETAILS:");
                             Console.WriteLine($"Username: {user.UserID}");
@@ -91,10 +90,16 @@ namespace BankingLedger
                 }
 
                 // Handle user's selection
+                Console.Clear();
                 switch (selection) {
                     case ConsoleKey.D1:
                         // User wants to make a deposit
                         Console.WriteLine("Deposit");
+                        if (!user.makeDeposit()) {
+                            Console.WriteLine("The amount was not deposited. Please try again.");
+                        } else {
+                            Console.WriteLine("Your transaction was successful.");
+                        }
                         break;
                     case ConsoleKey.D2:
                         // User wants to make a withdrawal
@@ -103,6 +108,7 @@ namespace BankingLedger
                     case ConsoleKey.D3:
                         // User wants to check balance
                         Console.WriteLine("Check Balance");
+                        user.checkBalance();
                         break;
                     case ConsoleKey.D4:
                         // User wants to view transactions
