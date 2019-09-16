@@ -1,5 +1,5 @@
 # Banking Ledger
-#### Structural Overview
+### Structural Overview
 
 ```
 banking-ledger/
@@ -19,23 +19,21 @@ banking-ledger/
 
 
 
-#### Run Program
+### Run Program
 
 Inside the directory _banking-ledger/BankingLedger_, the _Program.cs_ file can be run with the command:  
 
 `dotnet run`
 
+<br />
 
-
-#### Test Program
+### Test Program
 
 Inside the directory _banking-ledger/BankingLedger.Tests_, run the command:  
 
 `dotnet test`
 
+<br />
+<br />
 
-
-
-
-
-Copyright © 2019 Michelle Duer
+##### Copyright © 2019 Michelle Duer
