@@ -7,9 +7,9 @@ namespace BankingLedger
     public static class CLInterface
     {
         public static int promptCount { get; set; }
-        public const int LIMIT = 4;
+        public const int MAXPROMPT = 4;
 
-        // A welcome message
+        // a welcome message
         public static void welcomeMessage()
         {
             Console.Clear();
@@ -147,13 +147,12 @@ namespace BankingLedger
         public static bool promptPassword(ref string tempPass)
         {
             int prompt = 0;
-            int maxPrompt = 5;
 
             // Ensure the password is set and within the maximum prompts allowed
             Console.Clear();
             Console.WriteLine("\nEnter your password (minimum 8 characters):");
 
-            while (prompt < maxPrompt && !UserUtility.createPassword(ref tempPass)) {
+            while (prompt < MAXPROMPT && !UserUtility.createPassword(ref tempPass)) {
                 prompt++;
                 Console.WriteLine("\nEnter your password (minimum 8 characters):");
             }
@@ -203,7 +202,6 @@ namespace BankingLedger
         {
             bool valid = false;
             int promptCount = 0;
-            int maxPrompt = 5;
             double amountFormatted;
 
             do {
@@ -218,7 +216,7 @@ namespace BankingLedger
                 } else {
                     valid = true;
                 }
-            } while (!valid && promptCount <= maxPrompt);
+            } while (!valid && promptCount < MAXPROMPT);
 
             return user.Checking.deposit(amountFormatted);
         }
@@ -254,7 +252,6 @@ namespace BankingLedger
         {
             bool valid = false;
             int promptCount = 0;
-            int maxPrompt = 5;
             double amountFormatted;
 
             do {
@@ -269,7 +266,7 @@ namespace BankingLedger
                 } else {
                     valid = true;
                 }
-            } while (!valid && promptCount <= maxPrompt);
+            } while (!valid && promptCount < MAXPROMPT);
 
             char continueTransaction = checkOverdrawn(ref user, amountFormatted);
 
