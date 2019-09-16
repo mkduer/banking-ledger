@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace BankingLedger
 {
@@ -9,14 +10,14 @@ namespace BankingLedger
         public const int LIMIT = 4;
 
         // A welcome message
-        public static void WelcomeMessage()
+        public static void welcomeMessage()
         {
             Console.Clear();
             Console.WriteLine("\nWelcome to the Most Amazing Bank!\n");
         }
 
-        // A welcome menu that returns valid key stroke options
-        public static ConsoleKey[] WelcomeMenu()
+        // a welcome menu that returns valid key stroke options
+        public static ConsoleKey[] welcomeMenu()
         {
             Console.WriteLine("\nPlease select from the following options:");
             Console.WriteLine("(1) Login");
@@ -27,8 +28,8 @@ namespace BankingLedger
             return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
         }
 
-        // A user account menu that returns valid key stroke options
-        public static ConsoleKey[] MainMenu()
+        // a user account menu that returns valid key stroke options
+        public static ConsoleKey[] mainMenu()
         {
             Console.WriteLine("\nPlease select from the following options:");
             Console.WriteLine("(1) Deposit");
@@ -66,12 +67,6 @@ namespace BankingLedger
             _exitProgram();
         }
 
-        // exit program
-        private static void _exitProgram()
-        {
-            Environment.Exit(1);
-        }
-
         // create details for new user
         public static bool createUser(ref User user)
         {
@@ -95,7 +90,7 @@ namespace BankingLedger
                 return false;
             }
 
-            // create a new user if all fields were created and validated
+            // create a new user with valid parameters
             user = new User(id, firstName, lastName, pass);
 
             return true;
@@ -203,5 +198,120 @@ namespace BankingLedger
             }
             return true;
         }
+
+        // user makes a deposit
+        public static bool makeDeposit(ref User user)
+        {
+            bool valid = false;
+            int promptCount = 0;
+            int maxPrompt = 5;
+            double amountFormatted;
+
+            do {
+                promptCount++;
+                Console.WriteLine("How much do you want to deposit?");
+                Console.WriteLine("\nExample: 25.00\n");
+                string amount = Console.ReadLine();
+                amountFormatted = formatCurrency(amount);
+
+                if (amountFormatted == (double) -1) {
+                    Console.WriteLine("Invalid value was entered.");
+                } else {
+                    valid = true;
+                }
+            } while (!valid && promptCount <= maxPrompt);
+
+            return user.Checking.deposit(amountFormatted);
+        }
+
+        // format string into currency
+        public static double formatCurrency(string amountString)
+        {
+            double formatted = (double) -1;
+            if (string.IsNullOrEmpty(amountString))
+            {
+                return formatted;
+            }
+
+            // Check that the parameter has a valid pattern
+            string pattern = @"^$?\s*\d*.\d*\s*$";
+            Regex regex = new Regex(pattern);
+
+            // If the string is valid, convert to a double
+            if (regex.IsMatch(amountString)) {
+                try {
+                    formatted = Convert.ToDouble(amountString);
+                } catch (FormatException) {
+                    Console.WriteLine($"Unable to convert '{amountString}' to a valid transaction value.");
+                } catch (OverflowException) {
+                    Console.WriteLine($"{amountString} is outside a double type range");
+                }
+            }
+            return formatted;
+        }
+
+        // user makes a withdrawal
+        public static bool makeWithdrawal(ref User user)
+        {
+            bool valid = false;
+            int promptCount = 0;
+            int maxPrompt = 5;
+            double amountFormatted;
+
+            do {
+                promptCount++;
+                Console.WriteLine("How much do you want to withdraw?");
+                Console.WriteLine("\nExample: 25.00\n");
+                string amount = Console.ReadLine();
+                amountFormatted = formatCurrency(amount);
+
+                if (amountFormatted == (double) -1) {
+                    Console.WriteLine("Invalid value was entered.");
+                } else {
+                    valid = true;
+                }
+            } while (!valid && promptCount <= maxPrompt);
+
+            char continueTransaction = checkOverdrawn(ref user, amountFormatted);
+
+            if (!continueTransaction.Equals('Y')) {
+                Console.WriteLine("\nTransaction Cancelled");
+                return false;
+            }
+
+            return user.Checking.withdraw(amountFormatted);
+        }
+
+        // check if user's account will be overdrawn
+        public static char checkOverdrawn(ref User user, double amount)
+        {
+            string response = "Y";
+
+            if (user.Checking.Balance - amount < 0) {
+                Console.WriteLine($"\nWithdrawing {amount:C} will overdraw your account.");
+                Console.WriteLine("Would you like to continue with the withdrawal? (y/n)");
+                response = Console.ReadLine().ToUpper();
+            }
+            return response[0];
+        }
+
+        // check user's balance
+        public static void checkBalance(ref User user)
+        {
+            Console.WriteLine($"Your balance is {user.Checking.Balance:C}");
+        }
+
+        // view user's transactions
+        public static void viewTransactions(ref User user)
+        {
+            user.Checking.displayTransactions();
+        }
+
+        // exit program
+        private static void _exitProgram()
+        {
+            Environment.Exit(1);
+        }
+
     }
 }

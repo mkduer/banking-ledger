@@ -41,12 +41,6 @@ namespace BankingLedger
             return _withdraw(amount);
         }
 
-        // display the resulting balance
-        public void displayBalance() 
-        {
-            Console.WriteLine($"{this.Balance:C}");
-        }
-
         // display the transactions
         public void displayTransactions()
         {

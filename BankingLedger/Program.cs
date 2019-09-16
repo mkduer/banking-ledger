@@ -7,24 +7,25 @@ namespace BankingLedger
         static void Main(string[] args)
         {
             bool exit = false;
+            bool logout = false;
             bool accountMenu = false;
             User user = null;
 
             // Welcome user
-            Interface.WelcomeMessage();
+            Interface.welcomeMessage();
 
             // Provide welcome menu options and check for valid selection, 
             // until program is exited or next menu is entered
             do {
                 Interface.resetPrompt();
-                ConsoleKey[] validOptions = Interface.WelcomeMenu();
+                ConsoleKey[] validOptions = Interface.welcomeMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
                 while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Interface.promptCount < Interface.LIMIT) {
                     Interface.increasePromptCount();;
                     Console.WriteLine($"Invalid option selected. Please try again (Attempt {Interface.promptCount})\n");
-                    _ = Interface.WelcomeMenu();
+                    _ = Interface.welcomeMenu();
                     selection = Console.ReadKey(true).Key;
                 }
 
@@ -61,6 +62,7 @@ namespace BankingLedger
                         }
                         break;
                     default:
+                        // User wants to exit the program
                         Console.WriteLine("Exit Program");
                         exit = true;
                         Interface.Exit();
@@ -68,19 +70,22 @@ namespace BankingLedger
                 }
             } while (!exit && !accountMenu);
 
-            exit = false;
+            // Welcome validated user
             Console.WriteLine($"Welcome {user.FirstName} {user.LastName}\n");
+            exit = false;
 
+            // Provide user banking menu options 
+            // check for valid selection until program is exited
             do {
                 Interface.resetPrompt();
-                ConsoleKey[] validOptions = Interface.MainMenu();
+                ConsoleKey[] validOptions = Interface.mainMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
                 while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Interface.promptCount < Interface.LIMIT) {
                     Interface.increasePromptCount();;
                     Console.WriteLine($"Invalid option selected. Please try again (Attempt {Interface.promptCount})\n");
-                    _ = Interface.MainMenu();
+                    _ = Interface.mainMenu();
                     selection = Console.ReadKey(true).Key;
                 }
 
@@ -93,41 +98,40 @@ namespace BankingLedger
                 Console.Clear();
                 switch (selection) {
                     case ConsoleKey.D1:
-                        // User wants to make a deposit
+                        // Make a deposit
                         Console.WriteLine("Deposit");
-                        if (!user.makeDeposit()) {
+                        if (!Interface.makeDeposit(ref user)) {
                             Console.WriteLine("The amount was not deposited. Please try again.");
                         } else {
                             Console.WriteLine("Your transaction was successful.");
                         }
                         break;
                     case ConsoleKey.D2:
-                        // User wants to make a withdrawal
+                        // Make a withdrawal
                         Console.WriteLine("Make a Withdrawal");
-                        if (!user.makeWithdrawal()) {
+                        if (!Interface.makeWithdrawal(ref user)) {
                             Console.WriteLine("The amount was not withdrawn.");
                         } else {
                             Console.WriteLine("Your transaction was successful.");
                         }
                         break;
                     case ConsoleKey.D3:
-                        // User wants to check balance
+                        // Check balance
                         Console.WriteLine("Check Balance");
-                        Console.Write($"Your balance is ");
-                        user.Checking.displayBalance();
+                        Interface.checkBalance(ref user);
                         break;
                     case ConsoleKey.D4:
-                        // User wants to view transactions
+                        // View transactions
                         Console.WriteLine("View transactions");
-                        user.Checking.displayTransactions();
+                        Interface.viewTransactions(ref user);
                         break;
                     default:
+                        // Logout
                         Console.WriteLine("Logout");
-                        exit = true;
-                        Interface.Exit();
+                        logout = true;
                         break;
                 }
-            } while (!exit);
+            } while (!logout);
         }
     }
 }
