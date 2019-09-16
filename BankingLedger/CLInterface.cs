@@ -176,7 +176,7 @@ namespace BankingLedger
 
             try {
                 UserUtility.verifyUser(ref user, ref id);
-            } catch (UnauthorizedAccessException e) {
+            } catch (UnauthorizedAccessException) {
                 Console.WriteLine("Login Failed. Invalid Credentials.");
                 return false;
             }
@@ -194,7 +194,7 @@ namespace BankingLedger
 
             try {
                 UserUtility.verifyPassword(ref user, ref temp);
-            } catch (UnauthorizedAccessException e) {
+            } catch (UnauthorizedAccessException) {
                 Console.WriteLine("Login Failed. Invalid Credentials.");
                 return false;
             }
