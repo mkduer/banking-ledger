@@ -54,7 +54,7 @@ namespace BankingLedger
             promptCount = 0;
         }
 
-        // wrapper: exit program
+        // exit program
         public static void Exit()
         {
             _exitProgram();
@@ -304,7 +304,22 @@ namespace BankingLedger
         // view user's transactions
         public static void viewTransactions(ref User user)
         {
-            user.Checking.displayTransactions();
+            int repeat = 52;
+            String transactionBorder = new String('=', repeat);
+            String totalBorder = new String('-', repeat);
+            Console.WriteLine(transactionBorder);
+            user.Checking.Ledger.ForEach(delegate(Transaction transaction)
+            {
+                var time = UserUtility.convertTime(transaction.Timestamp);
+                if (time != null) {
+                    Console.WriteLine($"{time, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
+                } else {
+                    Console.WriteLine($"(UTC) {transaction.Timestamp, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
+                }
+            });
+            Console.WriteLine(totalBorder);
+            Console.WriteLine($"Current Balance: {user.Checking.Balance, 33:C}");
+            Console.WriteLine(transactionBorder);
         }
 
         // exit program
