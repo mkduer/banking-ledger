@@ -174,8 +174,10 @@ namespace BankingLedger
             Console.WriteLine("\nEnter your username:");
             id = Console.ReadLine();
 
-            if (!UserUtility.verifyUser(ref user, ref id)) {
-                Console.WriteLine("The entered username does not exist");
+            try {
+                UserUtility.verifyUser(ref user, ref id);
+            } catch (UnauthorizedAccessException e) {
+                Console.WriteLine("Login Failed. Invalid Credentials.");
                 return false;
             }
 
@@ -190,8 +192,10 @@ namespace BankingLedger
             } while (key.Key != ConsoleKey.Enter);
             Console.WriteLine();
 
-            if (!UserUtility.verifyPassword(ref user, ref temp)) {
-                Console.WriteLine("Invalid Password");
+            try {
+                UserUtility.verifyPassword(ref user, ref temp);
+            } catch (UnauthorizedAccessException e) {
+                Console.WriteLine("Login Failed. Invalid Credentials.");
                 return false;
             }
             return true;

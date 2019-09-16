@@ -70,6 +70,7 @@ namespace BankingLedger
         private static bool _createPassword(ref string temp)
         {
             ConsoleKeyInfo key;
+            temp = "";
 
             // Create a valid password allowing for a maximum of characters, symbols, numbers
             // this could be modified to not include invalid ascii values
@@ -118,7 +119,10 @@ namespace BankingLedger
         // verify that username matches
         private static bool _verifyUser(ref User user, ref string id)
         {
-            return id == user.UserID;
+            if (id != user.UserID) {
+                throw new UnauthorizedAccessException();
+            }
+            return true;
         }
 
         // verify password
@@ -127,7 +131,7 @@ namespace BankingLedger
             // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
             // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
             if (string.IsNullOrEmpty(temp)) {
-                return false;
+                throw new UnauthorizedAccessException();
             }
 
             byte[] hashBytes = Convert.FromBase64String(user.Hash);
@@ -140,7 +144,7 @@ namespace BankingLedger
 
             for (int i = 0; i < _BYTESIZE; i++) {
                 if (hashBytes[i + _BYTESIZE] != hash[i]) {
-                    return false;
+                    throw new UnauthorizedAccessException();
                 }
             }
             return true;

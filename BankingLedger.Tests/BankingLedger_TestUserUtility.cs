@@ -1,9 +1,20 @@
 using Xunit;
+using System;
 
 namespace BankingLedger.UnitTests
 {
     public class BankingLedger_TestUserUtility
     {
+        [Theory]
+        [InlineData("validusername", "")]
+        [InlineData("validusername", null)]
+        [InlineData("validusername", "invalid")]
+        public void TestVerifyUser_InvalidUsernameThrowsException(string id, string refUserID)
+        {
+            User user = new User(id, "firstname", "lastname", "hash");
+            Assert.Throws<UnauthorizedAccessException>(() => UserUtility.verifyUser(ref user, ref refUserID));
+        }
+
         [Theory]
         [InlineData("avalidusername", "")]
         [InlineData("a23r8u9ajfhasfmkld*)478", "")]
