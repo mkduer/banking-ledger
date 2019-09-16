@@ -8,7 +8,7 @@ namespace BankingLedger
         {
             bool exit = false;
             bool accountMenu = false;
-            User user = new User();
+            User user = null;
 
             // Welcome user
             Interface.WelcomeMessage();
@@ -39,7 +39,7 @@ namespace BankingLedger
                     case ConsoleKey.D1:
                         // User wants to login
                         Console.WriteLine("User Login");
-                        if (!user.login()) {
+                        if (!Interface.login(ref user)) {
                             Console.WriteLine($"\nYou may try logging in again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
@@ -50,7 +50,7 @@ namespace BankingLedger
                     case ConsoleKey.D2:
                         // User wants to create account
                         Console.WriteLine("Create Account");
-                        if (!user.createUser()) {
+                        if (!Interface.createUser(ref user)) {
                             Console.WriteLine($"\nYou may try creating an account again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
@@ -113,12 +113,13 @@ namespace BankingLedger
                     case ConsoleKey.D3:
                         // User wants to check balance
                         Console.WriteLine("Check Balance");
-                        user.checkBalance();
+                        Console.Write($"Your balance is ");
+                        user.Checking.displayBalance();
                         break;
                     case ConsoleKey.D4:
                         // User wants to view transactions
                         Console.WriteLine("View transactions");
-                        user.viewTransactions();
+                        user.Checking.displayTransactions();
                         break;
                     default:
                         Console.WriteLine("Logout");
