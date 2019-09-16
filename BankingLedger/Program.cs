@@ -8,29 +8,29 @@ namespace BankingLedger
         {
             bool exit = false;
             bool accountMenu = false;
-            User user = new User();
+            User user = null;
 
             // Welcome user
-            Menu.WelcomeMessage();
+            Interface.WelcomeMessage();
 
             // Provide welcome menu options and check for valid selection, 
             // until program is exited or next menu is entered
             do {
-                Menu.resetPrompt();
-                ConsoleKey[] validOptions = Menu.WelcomeMenu();
+                Interface.resetPrompt();
+                ConsoleKey[] validOptions = Interface.WelcomeMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Menu.promptCount < Menu.LIMIT) {
-                    Menu.increasePromptCount();;
-                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {Menu.promptCount})\n");
-                    _ = Menu.WelcomeMenu();
+                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Interface.promptCount < Interface.LIMIT) {
+                    Interface.increasePromptCount();;
+                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {Interface.promptCount})\n");
+                    _ = Interface.WelcomeMenu();
                     selection = Console.ReadKey(true).Key;
                 }
 
                 // Program exits if too many unsuccessful selections were attempted
-                if (Menu.promptCount >= Menu.LIMIT) {
-                    Menu.Exit_TooManyInvalidKeyPresses();
+                if (Interface.promptCount >= Interface.LIMIT) {
+                    Interface.Exit_TooManyInvalidKeyPresses();
                 }
 
                 // Handle user's selection
@@ -39,7 +39,7 @@ namespace BankingLedger
                     case ConsoleKey.D1:
                         // User wants to login
                         Console.WriteLine("User Login");
-                        if (!user.login()) {
+                        if (!Interface.login(ref user)) {
                             Console.WriteLine($"\nYou may try logging in again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
@@ -50,7 +50,7 @@ namespace BankingLedger
                     case ConsoleKey.D2:
                         // User wants to create account
                         Console.WriteLine("Create Account");
-                        if (!user.createUser()) {
+                        if (!Interface.createUser(ref user)) {
                             Console.WriteLine($"\nYou may try creating an account again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
@@ -63,7 +63,7 @@ namespace BankingLedger
                     default:
                         Console.WriteLine("Exit Program");
                         exit = true;
-                        Menu.Exit();
+                        Interface.Exit();
                         break;
                 }
             } while (!exit && !accountMenu);
@@ -72,21 +72,21 @@ namespace BankingLedger
             Console.WriteLine($"Welcome {user.FirstName} {user.LastName}\n");
 
             do {
-                Menu.resetPrompt();
-                ConsoleKey[] validOptions = Menu.MainMenu();
+                Interface.resetPrompt();
+                ConsoleKey[] validOptions = Interface.MainMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Menu.promptCount < Menu.LIMIT) {
-                    Menu.increasePromptCount();;
-                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {Menu.promptCount})\n");
-                    _ = Menu.MainMenu();
+                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Interface.promptCount < Interface.LIMIT) {
+                    Interface.increasePromptCount();;
+                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {Interface.promptCount})\n");
+                    _ = Interface.MainMenu();
                     selection = Console.ReadKey(true).Key;
                 }
 
                 // Program exits if too many unsuccessful selections were attempted
-                if (Menu.promptCount >= Menu.LIMIT) {
-                    Menu.Exit_TooManyInvalidKeyPresses();
+                if (Interface.promptCount >= Interface.LIMIT) {
+                    Interface.Exit_TooManyInvalidKeyPresses();
                 }
 
                 // Handle user's selection
@@ -113,17 +113,18 @@ namespace BankingLedger
                     case ConsoleKey.D3:
                         // User wants to check balance
                         Console.WriteLine("Check Balance");
-                        user.checkBalance();
+                        Console.Write($"Your balance is ");
+                        user.Checking.displayBalance();
                         break;
                     case ConsoleKey.D4:
                         // User wants to view transactions
                         Console.WriteLine("View transactions");
-                        user.viewTransactions();
+                        user.Checking.displayTransactions();
                         break;
                     default:
                         Console.WriteLine("Logout");
                         exit = true;
-                        Menu.Exit();
+                        Interface.Exit();
                         break;
                 }
             } while (!exit);
