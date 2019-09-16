@@ -22,7 +22,7 @@ namespace BankingLedger
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.LIMIT) {
+                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.MAXPROMPT) {
                     CLInterface.increasePromptCount();;
                     Console.WriteLine($"Invalid option selected. Please try again (Attempt {CLInterface.promptCount})\n");
                     _ = CLInterface.welcomeMenu();
@@ -30,7 +30,7 @@ namespace BankingLedger
                 }
 
                 // Program exits if too many unsuccessful selections were attempted
-                if (CLInterface.promptCount >= CLInterface.LIMIT) {
+                if (CLInterface.promptCount >= CLInterface.MAXPROMPT) {
                     CLInterface.Exit_TooManyInvalidKeyPresses();
                 }
 
@@ -82,7 +82,7 @@ namespace BankingLedger
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.LIMIT) {
+                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.MAXPROMPT) {
                     CLInterface.increasePromptCount();;
                     Console.WriteLine($"Invalid option selected. Please try again (Attempt {CLInterface.promptCount})\n");
                     _ = CLInterface.mainMenu();
@@ -90,7 +90,7 @@ namespace BankingLedger
                 }
 
                 // Program exits if too many unsuccessful selections were attempted
-                if (CLInterface.promptCount >= CLInterface.LIMIT) {
+                if (CLInterface.promptCount >= CLInterface.MAXPROMPT) {
                     CLInterface.Exit_TooManyInvalidKeyPresses();
                 }
 
