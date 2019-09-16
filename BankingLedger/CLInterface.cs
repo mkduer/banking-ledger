@@ -100,7 +100,6 @@ namespace BankingLedger
         public static bool promptUserID(ref string tempUser)
         {
             char confirmation = 'N';
-            string response = "";
             string id = "";
 
             while (!confirmation.Equals('Y')) {
@@ -110,12 +109,25 @@ namespace BankingLedger
                 if (!UserUtility.validateUserID(id, ref tempUser)) {
                     return false;
                 }
-
-                Console.WriteLine($"\nIs {id} the correct username? (y/n)");
-                response = Console.ReadLine().ToUpper();
-                confirmation = response[0];
+                confirmation = askUserConfirmation("\nIs " + id + " the correct username? (y/n)");
             }
             return true;
+        }
+
+        // receive a y/n confirmation from user
+        // and handle other possible entries such as the Enter key
+        public static char askUserConfirmation(string question)
+        {
+            char confirmation = 'N';
+
+            Console.WriteLine(question);
+            string response = Console.ReadLine().ToUpper();
+
+            if (response != "") {
+                confirmation = response[0];
+            }
+
+            return confirmation;
         }
 
         // prompt for first and last names
@@ -135,10 +147,7 @@ namespace BankingLedger
                 if (!UserUtility.validateRealName(first, last, ref tempFirst, ref tempLast)) {
                     return false;
                 }
-
-                Console.WriteLine($"\nIs {first} {last} correct? (y/n)");
-                response = Console.ReadLine().ToUpper();
-                confirmation = response[0];
+                confirmation = askUserConfirmation("\nIs " + first + " " + last + " correct? (y/n)");
             }
             return true;
         }
@@ -285,14 +294,13 @@ namespace BankingLedger
         // check if user's account will be overdrawn
         public static char checkOverdrawn(ref User user, double amount)
         {
-            string response = "Y";
+            char confirmation = 'N';
 
             if (user.Checking.Balance - amount < 0) {
                 Console.WriteLine($"\nWithdrawing {amount:C} will overdraw your account.");
-                Console.WriteLine("Would you like to continue with the withdrawal? (y/n)");
-                response = Console.ReadLine().ToUpper();
+                confirmation = askUserConfirmation("\nWould you like to continue with the withdrawal? (y/n)");
             }
-            return response[0];
+            return confirmation;
         }
 
         // check user's balance
