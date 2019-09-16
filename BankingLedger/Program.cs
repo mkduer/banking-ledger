@@ -61,6 +61,7 @@ namespace BankingLedger
                         }
                         break;
                     default:
+                        // User wants to exit the program
                         Console.WriteLine("Exit Program");
                         exit = true;
                         Interface.Exit();
@@ -68,9 +69,12 @@ namespace BankingLedger
                 }
             } while (!exit && !accountMenu);
 
-            exit = false;
+            // Welcome validated user
             Console.WriteLine($"Welcome {user.FirstName} {user.LastName}\n");
+            exit = false;
 
+            // Provide user banking menu options 
+            // check for valid selection until program is exited
             do {
                 Interface.resetPrompt();
                 ConsoleKey[] validOptions = Interface.MainMenu();
@@ -93,35 +97,35 @@ namespace BankingLedger
                 Console.Clear();
                 switch (selection) {
                     case ConsoleKey.D1:
-                        // User wants to make a deposit
+                        // Make a deposit
                         Console.WriteLine("Deposit");
-                        if (!user.makeDeposit()) {
+                        if (!Interface.makeDeposit(ref user)) {
                             Console.WriteLine("The amount was not deposited. Please try again.");
                         } else {
                             Console.WriteLine("Your transaction was successful.");
                         }
                         break;
                     case ConsoleKey.D2:
-                        // User wants to make a withdrawal
+                        // Make a withdrawal
                         Console.WriteLine("Make a Withdrawal");
-                        if (!user.makeWithdrawal()) {
+                        if (!Interface.makeWithdrawal(ref user)) {
                             Console.WriteLine("The amount was not withdrawn.");
                         } else {
                             Console.WriteLine("Your transaction was successful.");
                         }
                         break;
                     case ConsoleKey.D3:
-                        // User wants to check balance
+                        // Check balance
                         Console.WriteLine("Check Balance");
-                        Console.Write($"Your balance is ");
-                        user.Checking.displayBalance();
+                        Interface.checkBalance(ref user);
                         break;
                     case ConsoleKey.D4:
-                        // User wants to view transactions
+                        // View transactions
                         Console.WriteLine("View transactions");
-                        user.Checking.displayTransactions();
+                        Interface.viewTransactions(ref user);
                         break;
                     default:
+                        // Logout
                         Console.WriteLine("Logout");
                         exit = true;
                         Interface.Exit();
