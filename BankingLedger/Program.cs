@@ -52,6 +52,7 @@ namespace BankingLedger
                         // User wants to create account
                         Console.WriteLine("Create Account");
                         if (!CLInterface.createUser(ref user)) {
+                            Console.WriteLine("\nAccount Creation unsuccessful.");
                             Console.WriteLine($"\nYou may try creating an account again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
