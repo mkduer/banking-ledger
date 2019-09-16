@@ -127,7 +127,6 @@ namespace BankingLedger
             string response = "";
 
             while (!confirmation.Equals('Y')) {
-                // Console.Clear();  //TODO uncomment
                 Console.WriteLine("\nEnter your first name:");
                 first = Console.ReadLine();
                 Console.WriteLine("Enter your last name:");
