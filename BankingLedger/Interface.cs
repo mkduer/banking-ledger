@@ -10,7 +10,7 @@ namespace BankingLedger
         public const int LIMIT = 4;
 
         // A welcome message
-        public static void WelcomeMessage()
+        public static void welcomeMessage()
         {
             Console.Clear();
             Console.WriteLine("\nWelcome to the Most Amazing Bank!\n");
@@ -272,19 +272,27 @@ namespace BankingLedger
                 }
             } while (!valid && promptCount <= maxPrompt);
 
-            if (user.Checking.Balance - amountFormatted < 0) {
-                Console.WriteLine($"\nWithdrawing {amountFormatted:C} will overdraw your account.");
-                Console.WriteLine("Would you like to continue with the withdrawal? (y/n)");
-                string response = Console.ReadLine().ToUpper();
-                char confirmation = response[0];
+            char continueTransaction = checkOverdrawn(ref user, amountFormatted);
 
-                if (!confirmation.Equals('Y')) {
-                    Console.WriteLine("\nTransaction Cancelled");
-                    return false;
-                }
+            if (!continueTransaction.Equals('Y')) {
+                Console.WriteLine("\nTransaction Cancelled");
+                return false;
             }
 
             return user.Checking.withdraw(amountFormatted);
+        }
+
+        // check if user's account will be overdrawn
+        public static char checkOverdrawn(ref User user, double amount)
+        {
+            string response = "Y";
+
+            if (user.Checking.Balance - amount < 0) {
+                Console.WriteLine($"\nWithdrawing {amount:C} will overdraw your account.");
+                Console.WriteLine("Would you like to continue with the withdrawal? (y/n)");
+                response = Console.ReadLine().ToUpper();
+            }
+            return response[0];
         }
 
         // check user's balance
