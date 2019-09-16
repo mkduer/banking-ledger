@@ -4,6 +4,8 @@ using System.Text;
 
 namespace BankingLedger
 {
+    // The UserUtility class handles the logic behind
+    // displaying/creating user data 
     public static class UserUtility
     {
         private const int _BYTESIZE = 16;
@@ -34,11 +36,13 @@ namespace BankingLedger
             return true;
         }
 
+        // create user password
         public static bool createPassword(ref string temp)
         {
             return _createPassword(ref temp);
         }
 
+        // create hash and salt
         public static bool createHashSalt(ref string temp)
         {
             return _createHashSalt(ref temp);
@@ -50,9 +54,16 @@ namespace BankingLedger
             return _verifyPassword(ref user, ref temp);
         }
 
+        // verify user is valid
         public static bool verifyUser(ref User user, ref string id)
         {
             return _verifyUser(ref user, ref id);
+        }
+
+        // convert the provided time into the user's local time
+        public static DateTime? convertTime(DateTime timestamp)
+        {
+            return _convertUTCtoLocalSystem(timestamp);
         }
 
         // create a temp password and check that it is valid
@@ -135,6 +146,16 @@ namespace BankingLedger
             return true;
         }
 
-
+        // convert UTC time over to the user's local (system) time
+        private static DateTime? _convertUTCtoLocalSystem(DateTime timestamp)
+        {
+            if (timestamp == null) {
+                return null;
+            }
+            // resource: https://stackoverflow.com/questions/12937968/converting-utc-datetime-to-local-datetime/12938028
+            DateTime timestampKindSpecific = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
+            DateTime localTimestamp = timestampKindSpecific.ToLocalTime();
+            return localTimestamp;
+        }
     }
 }
