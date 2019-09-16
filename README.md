@@ -33,9 +33,6 @@ Inside the directory _banking-ledger/BankingLedger.Tests_, run the command:
 
 `dotnet test`
 
-
-
-
-
+<br />
 
 Copyright © 2019 Michelle Duer

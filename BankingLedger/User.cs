@@ -1,5 +1,7 @@
 namespace BankingLedger
 {
+    // The User class represents a single user
+    // consisting of credentials required for a user to exist
     public class User
     {
         private string _userID;
