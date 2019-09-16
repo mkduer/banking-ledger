@@ -12,26 +12,26 @@ namespace BankingLedger
             User user = null;
 
             // Welcome user
-            Interface.welcomeMessage();
+            CLInterface.welcomeMessage();
 
             // Provide welcome menu options and check for valid selection, 
             // until program is exited or next menu is entered
             do {
-                Interface.resetPrompt();
-                ConsoleKey[] validOptions = Interface.welcomeMenu();
+                CLInterface.resetPrompt();
+                ConsoleKey[] validOptions = CLInterface.welcomeMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Interface.promptCount < Interface.LIMIT) {
-                    Interface.increasePromptCount();;
-                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {Interface.promptCount})\n");
-                    _ = Interface.welcomeMenu();
+                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.LIMIT) {
+                    CLInterface.increasePromptCount();;
+                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {CLInterface.promptCount})\n");
+                    _ = CLInterface.welcomeMenu();
                     selection = Console.ReadKey(true).Key;
                 }
 
                 // Program exits if too many unsuccessful selections were attempted
-                if (Interface.promptCount >= Interface.LIMIT) {
-                    Interface.Exit_TooManyInvalidKeyPresses();
+                if (CLInterface.promptCount >= CLInterface.LIMIT) {
+                    CLInterface.Exit_TooManyInvalidKeyPresses();
                 }
 
                 // Handle user's selection
@@ -40,7 +40,7 @@ namespace BankingLedger
                     case ConsoleKey.D1:
                         // User wants to login
                         Console.WriteLine("User Login");
-                        if (!Interface.login(ref user)) {
+                        if (!CLInterface.login(ref user)) {
                             Console.WriteLine($"\nYou may try logging in again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
@@ -51,7 +51,7 @@ namespace BankingLedger
                     case ConsoleKey.D2:
                         // User wants to create account
                         Console.WriteLine("Create Account");
-                        if (!Interface.createUser(ref user)) {
+                        if (!CLInterface.createUser(ref user)) {
                             Console.WriteLine($"\nYou may try creating an account again, or if you continue to have difficulties");
                             Console.WriteLine("please contact support at {contact point} for further help.");
                         } else {
@@ -65,33 +65,33 @@ namespace BankingLedger
                         // User wants to exit the program
                         Console.WriteLine("Exit Program");
                         exit = true;
-                        Interface.Exit();
+                        CLInterface.Exit();
                         break;
                 }
             } while (!exit && !accountMenu);
 
             // Welcome validated user
-            Console.WriteLine($"Welcome {user.FirstName} {user.LastName}\n");
+            Console.WriteLine($"Welcome {user.FirstName} {user.LastName}!");
             exit = false;
 
             // Provide user banking menu options 
             // check for valid selection until program is exited
             do {
-                Interface.resetPrompt();
-                ConsoleKey[] validOptions = Interface.mainMenu();
+                CLInterface.resetPrompt();
+                ConsoleKey[] validOptions = CLInterface.mainMenu();
                 ConsoleKey selection = Console.ReadKey(true).Key;
 
                 // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && Interface.promptCount < Interface.LIMIT) {
-                    Interface.increasePromptCount();;
-                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {Interface.promptCount})\n");
-                    _ = Interface.mainMenu();
+                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.LIMIT) {
+                    CLInterface.increasePromptCount();;
+                    Console.WriteLine($"Invalid option selected. Please try again (Attempt {CLInterface.promptCount})\n");
+                    _ = CLInterface.mainMenu();
                     selection = Console.ReadKey(true).Key;
                 }
 
                 // Program exits if too many unsuccessful selections were attempted
-                if (Interface.promptCount >= Interface.LIMIT) {
-                    Interface.Exit_TooManyInvalidKeyPresses();
+                if (CLInterface.promptCount >= CLInterface.LIMIT) {
+                    CLInterface.Exit_TooManyInvalidKeyPresses();
                 }
 
                 // Handle user's selection
@@ -99,8 +99,8 @@ namespace BankingLedger
                 switch (selection) {
                     case ConsoleKey.D1:
                         // Make a deposit
-                        Console.WriteLine("Deposit");
-                        if (!Interface.makeDeposit(ref user)) {
+                        Console.WriteLine("Deposit:");
+                        if (!CLInterface.makeDeposit(ref user)) {
                             Console.WriteLine("The amount was not deposited. Please try again.");
                         } else {
                             Console.WriteLine("Your transaction was successful.");
@@ -108,8 +108,8 @@ namespace BankingLedger
                         break;
                     case ConsoleKey.D2:
                         // Make a withdrawal
-                        Console.WriteLine("Make a Withdrawal");
-                        if (!Interface.makeWithdrawal(ref user)) {
+                        Console.WriteLine("Make a Withdrawal:");
+                        if (!CLInterface.makeWithdrawal(ref user)) {
                             Console.WriteLine("The amount was not withdrawn.");
                         } else {
                             Console.WriteLine("Your transaction was successful.");
@@ -117,13 +117,13 @@ namespace BankingLedger
                         break;
                     case ConsoleKey.D3:
                         // Check balance
-                        Console.WriteLine("Check Balance");
-                        Interface.checkBalance(ref user);
+                        Console.WriteLine("Check Balance:");
+                        CLInterface.checkBalance(ref user);
                         break;
                     case ConsoleKey.D4:
                         // View transactions
-                        Console.WriteLine("View transactions");
-                        Interface.viewTransactions(ref user);
+                        Console.WriteLine("View Transactions:");
+                        CLInterface.viewTransactions(ref user);
                         break;
                     default:
                         // Logout

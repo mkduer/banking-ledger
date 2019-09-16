@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace BankingLedger
 {
     // The Menu class prompts the user with menu options
-    public static class Interface
+    public static class CLInterface
     {
         public static int promptCount { get; set; }
         public const int LIMIT = 4;
