@@ -38,11 +38,6 @@ namespace BankingLedger
         }
 
         // create user password
-        public static bool createPassword(ref string temp)
-        {
-            return _createPassword(ref temp);
-        }
-
         // create hash and salt
         public static bool createHashSalt(ref string temp)
         {
@@ -65,33 +60,6 @@ namespace BankingLedger
         public static DateTime? convertTime(DateTime timestamp)
         {
             return _convertUTCtoLocalSystem(timestamp);
-        }
-
-        // create a temp password and check that it is valid
-        private static bool _createPassword(ref string temp)
-        {
-            ConsoleKeyInfo key;
-            temp = "";
-
-            // Create a valid password allowing for a maximum of characters, symbols, numbers
-            // this could be modified to not include invalid ascii values
-            do {
-                key = Console.ReadKey(true);
-
-                if ((int) key.Key > 31 && (int) key.Key < 127) 
-                {
-                    temp += key.KeyChar;
-                    Console.Write("*");
-                }
-            } while (key.Key != ConsoleKey.Enter);
-            Console.WriteLine();
-
-            if (temp.Length < 8 || string.IsNullOrEmpty(temp)) 
-            {
-                temp = "";
-                return false;
-            }
-            return true;
         }
 
         // create hash and salt
@@ -131,20 +99,20 @@ namespace BankingLedger
         }
 
         // verify password
-        private static bool _verifyPassword(ref UsersCollection users, ref User user, string id, ref string temp)
+        private static bool _verifyPassword(ref UsersCollection users, ref User user, string id, ref string pass)
         {
             // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
             // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
-            if (string.IsNullOrEmpty(temp))
+            if (string.IsNullOrEmpty(pass))
                 throw new UnauthorizedAccessException();
 
-            try {
+            try 
+            {
                 user = users.retrieveUser(id);
             } 
             catch (KeyNotFoundException) 
             {
-                Console.WriteLine("Invalid Credentials");
-                return false;
+                throw new UnauthorizedAccessException();
             }
 
             byte[] hashBytes = Convert.FromBase64String(user.Hash);
@@ -152,7 +120,7 @@ namespace BankingLedger
             Array.Copy(hashBytes, 0, salt, 0, _BYTESIZE);
 
             // Hash provided password
-            var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(temp), salt, _ITERATIONS, HashAlgorithmName.SHA256);
+            var derived = new Rfc2898DeriveBytes(Encoding.UTF8.GetBytes(pass), salt, _ITERATIONS, HashAlgorithmName.SHA256);
             byte[] hash = derived.GetBytes(_MAXBYTESIZE);
 
             for (int i = 0; i < _BYTESIZE; i++) {
