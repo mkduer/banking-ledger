@@ -188,16 +188,22 @@ namespace BankingLedger
         public static bool promptPassword(ref string tempPass)
         {
             int prompt = 0;
+            bool success = false;
 
             // Ensure the password is set and within the maximum prompts allowed
             Console.Clear();
             Console.WriteLine("\nEnter your password (minimum 8 characters):");
 
-            while (prompt < MAXPROMPT && !createPassword(ref tempPass)) 
+            while (prompt < MAXPROMPT && !success) 
             {
                 prompt++;
                 Console.WriteLine("\nEnter your password (minimum 8 characters):");
+                success = createPassword(ref tempPass);
             }
+
+            if (!success)
+                return false;
+
             return UserUtility.createHashSalt(ref tempPass);
         }
 
