@@ -14,7 +14,8 @@ namespace BankingLedger
 
             // Provide welcome menu options and 
             // check for valid selection until program is exited 
-            do {
+            do
+            {
                 ConsoleKey selection = mainMenuPrompt();
                 exit = mainMenu(ref users, selection);
             } while (!exit);
@@ -90,7 +91,8 @@ namespace BankingLedger
 
             // Provide user banking menu options 
             // check for valid selection until user logs out
-            do {
+            do 
+            {
                 ConsoleKey[] validOptions = null;
 
                 CLInterface.resetPrompt();

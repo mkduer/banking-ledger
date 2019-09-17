@@ -95,7 +95,8 @@ namespace BankingLedger
 
             if (promptUserID(ref users, ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) 
             {
-                try {
+                try 
+                {
                     // create a new user with valid parameters
                     user = new User(id, firstName, lastName, pass);
                     users.add(user);
@@ -192,12 +193,17 @@ namespace BankingLedger
             Console.Clear();
             Console.WriteLine("\nEnter your password (minimum 8 characters):");
 
-            while (prompt < MAXPROMPT && !UserUtility.createPassword(ref tempPass)) 
+            while (prompt < MAXPROMPT && !createPassword(ref tempPass)) 
             {
                 prompt++;
                 Console.WriteLine("\nEnter your password (minimum 8 characters):");
             }
             return UserUtility.createHashSalt(ref tempPass);
+        }
+
+        public static bool createPassword(ref string temp)
+        {
+            return _createPassword(ref temp);
         }
 
         // welcome user
@@ -224,7 +230,8 @@ namespace BankingLedger
             Console.WriteLine("\nEnter your username:");
             id = Console.ReadLine();
 
-            try {
+            try 
+            {
                 UserUtility.verifyUser(ref users, ref id);
             } 
             catch (ArgumentNullException) 
@@ -239,7 +246,8 @@ namespace BankingLedger
             }
 
             Console.WriteLine("\nEnter your password:");
-            do {
+            do 
+            {
                 key = Console.ReadKey(true);
 
                 if ((int) key.Key > 31 && (int) key.Key < 127) 
@@ -250,7 +258,8 @@ namespace BankingLedger
             } while (key.Key != ConsoleKey.Enter);
             Console.WriteLine();
 
-            try {
+            try 
+            {
                 UserUtility.verifyPassword(ref users, ref user, id, ref temp);
             } 
             catch (UnauthorizedAccessException) 
@@ -313,7 +322,8 @@ namespace BankingLedger
             // If the string is valid, convert to a double
             if (regex.IsMatch(amountString)) 
             {
-                try {
+                try 
+                {
                     formatted = Convert.ToDouble(amountString);
                 } 
                 catch (FormatException) 
@@ -337,7 +347,8 @@ namespace BankingLedger
 
             Console.WriteLine("Make a Withdrawal:");
 
-            do {
+            do 
+            {
                 promptCount++;
                 Console.WriteLine("How much do you want to withdraw?");
                 Console.WriteLine("\nExample: 25.00\n");
@@ -434,6 +445,34 @@ namespace BankingLedger
             Console.WriteLine($"\n{attemptedAction} Failed.");
             Console.WriteLine($"You may try {attemptedAction.ToLower()} again, or if you continue to have difficulties");
             Console.WriteLine("Please contact support at {contact point} for further help.");
+        }
+
+        // create a temp password and check that it is valid
+        private static bool _createPassword(ref string temp)
+        {
+            ConsoleKeyInfo key;
+            temp = "";
+
+            // Create a valid password allowing for a maximum of characters, symbols, numbers
+            // this could be modified to not include invalid ascii values
+            do 
+            {
+                key = Console.ReadKey(true);
+
+                if ((int) key.Key > 31 && (int) key.Key < 127) 
+                {
+                    temp += key.KeyChar;
+                    Console.Write("*");
+                }
+            } while (key.Key != ConsoleKey.Enter);
+            Console.WriteLine();
+
+            if (temp.Length < 8 || string.IsNullOrEmpty(temp)) 
+            {
+                temp = "";
+                return false;
+            }
+            return true;
         }
 
         // exit program
