@@ -55,16 +55,31 @@ namespace BankingLedger
         }
 
         // exit program
-        public static void Exit()
+        public static void exit()
         {
+            Console.WriteLine("Exit Program");
             _exitProgram();
         }
 
+        // invalid option and prompt count message
+        public static void invalidSelectionAttemptCount()
+        {
+            Console.WriteLine($"Invalid option selected. Please try again (Attempt {promptCount})\n");
+        }
+
         // exit program due to too many invalid key presses
-        public static void Exit_TooManyInvalidKeyPresses()
+        public static void exit_TooManyInvalidKeyPresses()
         {
             Console.WriteLine("Too many invalid selections were made. Goodbye!");
             _exitProgram();
+        }
+
+        public static void confirmUserCreation(ref User user)
+        {
+            Console.WriteLine($"Your account was created successfully\n");
+            Console.WriteLine("ACCOUNT DETAILS:");
+            Console.WriteLine($"Username: {user.UserID}");
+            Console.WriteLine($"Name: {user.FirstName} {user.LastName}");
         }
 
         // create details for new user
@@ -167,6 +182,12 @@ namespace BankingLedger
             return UserUtility.createHashSalt(ref tempPass);
         }
 
+        // welcome user
+        public static void welcomeUser(ref User user)
+        {
+            Console.WriteLine($"Welcome {user.FirstName} {user.LastName}!");
+        }
+
         // login user if valid
         public static bool login(ref User user)
         {
@@ -174,8 +195,10 @@ namespace BankingLedger
             string temp = "";
             ConsoleKeyInfo key;
 
+            Console.WriteLine("User Login");
+
             if (user == null) {
-                Console.WriteLine("User does not exist.");
+                Console.WriteLine("Invalid Credentials.");
                 return false;
             }
 
@@ -185,7 +208,7 @@ namespace BankingLedger
             try {
                 UserUtility.verifyUser(ref user, ref id);
             } catch (UnauthorizedAccessException) {
-                Console.WriteLine("Login Failed. Invalid Credentials.");
+                Console.WriteLine("Invalid Credentials.");
                 return false;
             }
 
@@ -203,18 +226,22 @@ namespace BankingLedger
             try {
                 UserUtility.verifyPassword(ref user, ref temp);
             } catch (UnauthorizedAccessException) {
-                Console.WriteLine("Login Failed. Invalid Credentials.");
+                Console.WriteLine("Invalid Credentials.");
                 return false;
             }
+
+            Console.WriteLine($"Credentials Verified.\n");
             return true;
         }
 
         // user makes a deposit
-        public static bool makeDeposit(ref User user)
+        public static void makeDeposit(ref User user)
         {
             bool valid = false;
             int promptCount = 0;
             double amountFormatted;
+
+            Console.WriteLine("Deposit:");
 
             do {
                 promptCount++;
@@ -230,7 +257,11 @@ namespace BankingLedger
                 }
             } while (!valid && promptCount < MAXPROMPT);
 
-            return user.Checking.deposit(amountFormatted);
+            if (!user.Checking.deposit(amountFormatted)) {
+                Console.WriteLine("The amount was not deposited. Please try again.");
+            } else {
+                Console.WriteLine("Your transaction was successful.");
+            }
         }
 
         // format string into currency
@@ -260,11 +291,13 @@ namespace BankingLedger
         }
 
         // user makes a withdrawal
-        public static bool makeWithdrawal(ref User user)
+        public static void makeWithdrawal(ref User user)
         {
             bool valid = false;
             int promptCount = 0;
             double amountFormatted;
+
+            Console.WriteLine("Make a Withdrawal:");
 
             do {
                 promptCount++;
@@ -283,11 +316,14 @@ namespace BankingLedger
             char continueTransaction = checkOverdrawn(ref user, amountFormatted);
 
             if (!continueTransaction.Equals('Y')) {
+                if (!user.Checking.withdraw(amountFormatted)) {
+                    Console.WriteLine("The amount was not withdrawn.");
+                } else {
+                    Console.WriteLine("Your transaction was successful.");
+                }
+            } else {
                 Console.WriteLine("\nTransaction Cancelled");
-                return false;
             }
-
-            return user.Checking.withdraw(amountFormatted);
         }
 
         // check if user's account will be overdrawn
@@ -297,7 +333,7 @@ namespace BankingLedger
 
             if (user.Checking.Balance - amount < 0) {
                 Console.WriteLine($"\nWithdrawing {amount:C} will overdraw your account.");
-                confirmation = askUserConfirmation("\nWould you like to continue with the withdrawal? (y/n)");
+                confirmation = askUserConfirmation("\nWould you like to stop this transaction? (y/n)");
             }
             return confirmation;
         }
@@ -305,7 +341,15 @@ namespace BankingLedger
         // check user's balance
         public static void checkBalance(ref User user)
         {
+            Console.WriteLine("Check Balance:");
             Console.WriteLine($"Your balance is {user.Checking.Balance:C}");
+        }
+
+        // change user's login status
+        public static void logout(ref bool logout)
+        {
+            Console.WriteLine("Logout");
+            logout = true;
         }
 
         // view user's transactions
@@ -314,6 +358,9 @@ namespace BankingLedger
             int repeat = 52;
             String transactionBorder = new String('=', repeat);
             String totalBorder = new String('-', repeat);
+
+            Console.WriteLine("View Transactions:");
+
             Console.WriteLine(transactionBorder);
             user.Checking.Ledger.ForEach(delegate(Transaction transaction)
             {
@@ -327,6 +374,13 @@ namespace BankingLedger
             Console.WriteLine(totalBorder);
             Console.WriteLine($"Current Balance: {user.Checking.Balance, 33:C}");
             Console.WriteLine(transactionBorder);
+        }
+
+        public static void contactSupport(string attemptedAction)
+        {
+            Console.WriteLine($"\n{attemptedAction} Failed.");
+            Console.WriteLine($"You may try {attemptedAction.ToLower()} again, or if you continue to have difficulties");
+            Console.WriteLine("Please contact support at {contact point} for further help.");
         }
 
         // exit program
