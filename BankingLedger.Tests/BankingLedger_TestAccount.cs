@@ -79,8 +79,8 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(15.50, "deposit")]
-        public void TestRecordTransaction_CorrectLedgerAfterSingleDeposit(double amount, string type)
+        [InlineData(15.50, TransactionType.Deposit)]
+        public void TestRecordTransaction_CorrectLedgerAfterSingleDeposit(double amount, TransactionType type)
         {
             Account account = new Account();
             account.deposit(amount);
@@ -89,8 +89,8 @@ namespace BankingLedger.UnitTests
         }
 
         [Theory]
-        [InlineData(29.89, "withdraw")]
-        public void TestRecordTransaction_CorrectLedgerAfterSingleWithdrawal(double amount, string type)
+        [InlineData(29.89, TransactionType.Withdraw)]
+        public void TestRecordTransaction_CorrectLedgerAfterSingleWithdraw(double amount, TransactionType type)
         {
             Account account = new Account(500);
             account.withdraw(amount);
@@ -102,7 +102,7 @@ namespace BankingLedger.UnitTests
         [InlineData(1.15, 3001.05, 25.00)]
         public void TestRecordTransaction_CorrectLedgerAfterMultipleDeposits(params double[] amounts)
         {
-            string type = "deposit";
+            TransactionType type = TransactionType.Deposit;
             Account account = new Account();
             Array.ForEach(amounts, amount => 
                 account.deposit(amount)
@@ -121,7 +121,7 @@ namespace BankingLedger.UnitTests
         [InlineData(5.25, 155.05, 0.01)]
         public void TestRecordTransaction_CorrectLedgerAfterMultipleWithdrawals(params double[] amounts)
         {
-            string type = "withdraw";
+            TransactionType type = TransactionType.Withdraw;
             Account account = new Account(500);
             Array.ForEach(amounts, amount => 
                 account.withdraw(amount)

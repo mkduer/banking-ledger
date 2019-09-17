@@ -392,13 +392,24 @@ namespace BankingLedger
             user.Checking.Ledger.ForEach(delegate(Transaction transaction)
             {
                 var time = UserUtility.convertTime(transaction.Timestamp);
+                string action = "";
+
+                if (transaction.Type == TransactionType.Deposit)
+                {
+                    action = "deposit";
+                }
+                else
+                {
+                    action = "withdraw";
+                }
+
                 if (time != null) 
                 {
-                    Console.WriteLine($"{time, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
+                    Console.WriteLine($"{time, -10} {action, 15} {transaction.Amount, 15:C}");
                 } 
                 else 
                 {
-                    Console.WriteLine($"(UTC) {transaction.Timestamp, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
+                    Console.WriteLine($"(UTC) {transaction.Timestamp, -10} {action, 15} {transaction.Amount, 15:C}");
                 }
             });
             Console.WriteLine(totalBorder);
