@@ -94,21 +94,28 @@ namespace BankingLedger
             Console.WriteLine("Let's create your account.");
 
 
-            if (promptUserID(ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) {
-                // create a new user with valid parameters
-                user = new User(id, firstName, lastName, pass);
-                users.add(user);
-
-                // TODO
-                users.displayUsers();
-
-                return true;
+            try {
+                if (promptUserID(ref users, ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) {
+                    // create a new user with valid parameters
+                    user = new User(id, firstName, lastName, pass);
+                    users.add(user);
+                }
+            } catch (ArgumentNullException) {
+                Console.WriteLine("Valid credentials must be used to create an account.");
+                return false;
+            } catch (ArgumentException) {
+                Console.WriteLine("This username is already taken. Please choose a different one.");
+                return false;
             }
-            return false;
+
+            // TODO testing users
+            users.displayUsers();
+
+            return true;
         }
 
         // prompt for user ID
-        public static bool promptUserID(ref string tempUser)
+        public static bool promptUserID(ref UsersCollection users, ref string tempID)
         {
             char confirmation = 'N';
             string id = "";
@@ -117,8 +124,8 @@ namespace BankingLedger
                 Console.WriteLine("\nPlease create a username:");
                 id = Console.ReadLine();
 
-                if (!UserUtility.validateUserID(id, ref tempUser)) {
-                    return false;
+                if (!UserUtility.validateUserID(ref users, id, ref tempID)) {
+                    throw new ArgumentException();
                 }
                 confirmation = askUserConfirmation("\nIs " + id + " the correct username? (y/n)");
             }

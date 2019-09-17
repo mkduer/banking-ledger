@@ -18,9 +18,9 @@ namespace BankingLedger
         }
 
         // add a user to collection of users
-        public bool add(User user)
+        public void add(User user)
         {
-            return _add(user);
+            this._add(user);
         }
 
         // displays all users
@@ -48,20 +48,11 @@ namespace BankingLedger
         }
 
 
-        // add a user to collection of users
+        // add a user to collection of users, an exception is thrown if the fuction fails
         // note: duplicate keys are not allowed
-        private bool _add(User user)
+        private void _add(User user)
         {
-            try {
-                this._users.Add(user.UserID, user);
-            } catch (ArgumentNullException) {
-                Console.WriteLine("A valid username must be provided to create a user.");
-                return false;
-            } catch (ArgumentException) {
-                Console.WriteLine("This username is already taken. Please choose a different one.");
-                return false;
-            }
-            return true;
+            this._users.Add(user.UserID, user);
         }
 
         private void _displayUsers()

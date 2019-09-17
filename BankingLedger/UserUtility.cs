@@ -12,12 +12,13 @@ namespace BankingLedger
         private const int _MAXBYTESIZE = 23;
         private const int _ITERATIONS = 3000;
 
-        // check that id parameter is valid
-        public static bool validateUserID(string id, ref string userID)
+        // check that id parameter is valid and that the id is not already taken
+        public static bool validateUserID(ref UsersCollection users, string id, ref string userID)
         {
-            if (string.IsNullOrEmpty(id)) {
+            if (string.IsNullOrEmpty(id) || users.hasUser(id)) {
                 return false;
             }
+
             userID = id;
             return true;
         }
