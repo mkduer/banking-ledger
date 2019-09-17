@@ -55,6 +55,7 @@ namespace BankingLedger
             this._users.Add(user.UserID, user);
         }
 
+        // displays users
         private void _displayUsers()
         {
             Console.WriteLine("All Users:");

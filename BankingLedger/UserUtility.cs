@@ -1,6 +1,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Collections.Generic;
 
 namespace BankingLedger
 {
@@ -139,7 +140,12 @@ namespace BankingLedger
                 throw new UnauthorizedAccessException();
             }
 
-            user = users.retrieveUser(id);
+            try {
+                user = users.retrieveUser(id);
+            } catch (KeyNotFoundException) {
+                Console.WriteLine("Invalid Credentials");
+                return false;
+            }
 
             byte[] hashBytes = Convert.FromBase64String(user.Hash);
             byte[] salt = new byte[_BYTESIZE];
