@@ -93,26 +93,26 @@ namespace BankingLedger
             Console.Clear();
             Console.WriteLine("Let's create your account.");
 
-
-            try {
-                if (promptUserID(ref users, ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) 
-                {
+            if (promptUserID(ref users, ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) 
+            {
+                try {
                     // create a new user with valid parameters
                     user = new User(id, firstName, lastName, pass);
                     users.add(user);
                 }
+                catch (ArgumentNullException) 
+                {
+                    Console.WriteLine("Valid credentials must be used to create an account.");
+                    return false;
+                } 
+                catch (ArgumentException) 
+                {
+                    Console.WriteLine("This username is already taken. Please choose a different one.");
+                    return false;
+                }
+                return true;
             } 
-            catch (ArgumentNullException) 
-            {
-                Console.WriteLine("Valid credentials must be used to create an account.");
-                return false;
-            } 
-            catch (ArgumentException) 
-            {
-                Console.WriteLine("This username is already taken. Please choose a different one.");
-                return false;
-            }
-            return true;
+            return false;
         }
 
         // prompt for user ID
@@ -123,11 +123,23 @@ namespace BankingLedger
 
             while (!confirmation.Equals('Y')) 
             {
-                Console.WriteLine("\nPlease create a username:");
+                Console.WriteLine("\nPlease create a username (no spaces allowed):");
                 id = Console.ReadLine();
 
-                if (!UserUtility.validateUserID(ref users, id, ref tempID)) 
-                    throw new ArgumentException();
+                try
+                {
+                    UserUtility.validateUserID(ref users, id, ref tempID);
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid username. Please try again.");
+                    return false;
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("That username is already taken. Please choose another.");
+                    return false;
+                }
 
                 confirmation = askUserConfirmation("\nIs " + id + " the correct username? (y/n)");
             }

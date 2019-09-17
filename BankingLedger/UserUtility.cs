@@ -16,8 +16,11 @@ namespace BankingLedger
         // check that id parameter is valid and that the id is not already taken
         public static bool validateUserID(ref UsersCollection users, string id, ref string userID)
         {
-            if (string.IsNullOrEmpty(id) || users.hasUser(id))
-                return false;
+            if (string.IsNullOrEmpty(id) || id.Contains(" "))
+                throw new FormatException();
+
+            if (users.hasUser(id))
+                throw new ArgumentException();
 
             userID = id;
             return true;
