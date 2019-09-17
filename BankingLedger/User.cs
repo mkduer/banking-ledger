@@ -43,7 +43,8 @@ namespace BankingLedger
             get { return _checking; }
         }
 
-        public User(string id, string firstName, string lastName, string hash) {
+        public User(string id, string firstName, string lastName, string hash) 
+        {
             this.UserID = id;
             this.FirstName = firstName;
             this.LastName = lastName;

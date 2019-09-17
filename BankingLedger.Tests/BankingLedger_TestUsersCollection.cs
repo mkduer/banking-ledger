@@ -23,7 +23,8 @@ namespace BankingLedger.UnitTests
         public void TestAddMultipleUsers_MultipleUsersExistTrue(params string[] multiID)
         {
             UsersCollection users = new UsersCollection();
-            foreach (string id in multiID) {
+            foreach (string id in multiID) 
+            {
                 User user = new User(id, "firstname", "lastname", "hash");
                 users.add(user);
             }
@@ -64,7 +65,6 @@ namespace BankingLedger.UnitTests
             users.add(user);
             Assert.False(users.hasUser(differentID));
         }
-
 
         [Theory]
         [InlineData(null)]

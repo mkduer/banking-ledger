@@ -16,25 +16,21 @@ namespace BankingLedger
         // check that id parameter is valid and that the id is not already taken
         public static bool validateUserID(ref UsersCollection users, string id, ref string userID)
         {
-            if (string.IsNullOrEmpty(id) || users.hasUser(id)) {
+            if (string.IsNullOrEmpty(id) || users.hasUser(id))
                 return false;
-            }
 
             userID = id;
             return true;
         }
 
-
         // check that name parameters are valid
         public static bool validateRealName(string first, string last, ref string userFirstName, ref string userLastName)
         {
-            if (string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) {
+            if (string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) 
                 return false;
-            }
 
             userFirstName = first;
             userLastName = last;
-
             return true;
         }
 
@@ -79,14 +75,16 @@ namespace BankingLedger
             do {
                 key = Console.ReadKey(true);
 
-                if ((int) key.Key > 31 && (int) key.Key < 127) {
+                if ((int) key.Key > 31 && (int) key.Key < 127) 
+                {
                     temp += key.KeyChar;
                     Console.Write("*");
                 }
             } while (key.Key != ConsoleKey.Enter);
             Console.WriteLine();
 
-            if (temp.Length < 8 || string.IsNullOrEmpty(temp)) {
+            if (temp.Length < 8 || string.IsNullOrEmpty(temp)) 
+            {
                 temp = "";
                 return false;
             }
@@ -101,9 +99,8 @@ namespace BankingLedger
             byte[] randSalt = new byte[_BYTESIZE];
             byte[] hashBytes = new byte[_BYTESIZE + _MAXBYTESIZE];
 
-            if (string.IsNullOrEmpty(temp)) {
+            if (string.IsNullOrEmpty(temp)) 
                 return false;
-            }
 
             // Create hash and salt
             RNGCryptoServiceProvider randCSP = new RNGCryptoServiceProvider();
@@ -121,13 +118,12 @@ namespace BankingLedger
         // verify that username matches
         private static bool _verifyUser(ref UsersCollection users, ref string id)
         {
-            if (id == null) {
+            if (id == null) 
                 throw new ArgumentNullException();
-            }
 
-            if (!users.hasUser(id)) {
+            if (!users.hasUser(id))
                 throw new UnauthorizedAccessException();
-            }
+
             return true;
         }
 
@@ -136,13 +132,14 @@ namespace BankingLedger
         {
             // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
             // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
-            if (string.IsNullOrEmpty(temp)) {
+            if (string.IsNullOrEmpty(temp))
                 throw new UnauthorizedAccessException();
-            }
 
             try {
                 user = users.retrieveUser(id);
-            } catch (KeyNotFoundException) {
+            } 
+            catch (KeyNotFoundException) 
+            {
                 Console.WriteLine("Invalid Credentials");
                 return false;
             }
@@ -156,9 +153,8 @@ namespace BankingLedger
             byte[] hash = derived.GetBytes(_MAXBYTESIZE);
 
             for (int i = 0; i < _BYTESIZE; i++) {
-                if (hashBytes[i + _BYTESIZE] != hash[i]) {
+                if (hashBytes[i + _BYTESIZE] != hash[i])
                     throw new UnauthorizedAccessException();
-                }
             }
             return true;
         }
@@ -166,9 +162,9 @@ namespace BankingLedger
         // convert UTC time over to the user's local (system) time
         private static DateTime? _convertUTCtoLocalSystem(DateTime timestamp)
         {
-            if (timestamp == null) {
+            if (timestamp == null)
                 return null;
-            }
+
             // resource: https://stackoverflow.com/questions/12937968/converting-utc-datetime-to-local-datetime/12938028
             DateTime timestampKindSpecific = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
             DateTime localTimestamp = timestampKindSpecific.ToLocalTime();
