@@ -109,7 +109,8 @@ namespace BankingLedger.UnitTests
             );
 
             int i = 0;
-            foreach (double amount in amounts) {
+            foreach (double amount in amounts) 
+            {
                 Assert.Equal(amount, account.Ledger[i].Amount);
                 Assert.Equal(type, account.Ledger[i].Type);
                 i += 1;
@@ -127,7 +128,8 @@ namespace BankingLedger.UnitTests
             );
 
             int i = 0;
-            foreach (double amount in amounts) {
+            foreach (double amount in amounts) 
+            {
                 Assert.Equal((amount * -1), account.Ledger[i].Amount);
                 Assert.Equal(type, account.Ledger[i].Type);
                 i += 1;

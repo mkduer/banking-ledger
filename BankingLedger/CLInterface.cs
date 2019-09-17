@@ -95,22 +95,23 @@ namespace BankingLedger
 
 
             try {
-                if (promptUserID(ref users, ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) {
+                if (promptUserID(ref users, ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) 
+                {
                     // create a new user with valid parameters
                     user = new User(id, firstName, lastName, pass);
                     users.add(user);
                 }
-            } catch (ArgumentNullException) {
+            } 
+            catch (ArgumentNullException) 
+            {
                 Console.WriteLine("Valid credentials must be used to create an account.");
                 return false;
-            } catch (ArgumentException) {
+            } 
+            catch (ArgumentException) 
+            {
                 Console.WriteLine("This username is already taken. Please choose a different one.");
                 return false;
             }
-
-            // TODO testing users
-            users.displayUsers();
-
             return true;
         }
 
@@ -120,13 +121,14 @@ namespace BankingLedger
             char confirmation = 'N';
             string id = "";
 
-            while (!confirmation.Equals('Y')) {
+            while (!confirmation.Equals('Y')) 
+            {
                 Console.WriteLine("\nPlease create a username:");
                 id = Console.ReadLine();
 
-                if (!UserUtility.validateUserID(ref users, id, ref tempID)) {
+                if (!UserUtility.validateUserID(ref users, id, ref tempID)) 
                     throw new ArgumentException();
-                }
+
                 confirmation = askUserConfirmation("\nIs " + id + " the correct username? (y/n)");
             }
             return true;
@@ -141,9 +143,8 @@ namespace BankingLedger
             Console.WriteLine(question);
             string response = Console.ReadLine().ToUpper();
 
-            if (response != "") {
+            if (response != "") 
                 confirmation = response[0];
-            }
 
             return confirmation;
         }
@@ -155,15 +156,16 @@ namespace BankingLedger
             string last = "";
             char confirmation = 'N';
 
-            while (!confirmation.Equals('Y')) {
+            while (!confirmation.Equals('Y')) 
+            {
                 Console.WriteLine("\nEnter your first name:");
                 first = Console.ReadLine();
                 Console.WriteLine("Enter your last name:");
                 last = Console.ReadLine();
 
-                if (!UserUtility.validateRealName(first, last, ref tempFirst, ref tempLast)) {
+                if (!UserUtility.validateRealName(first, last, ref tempFirst, ref tempLast)) 
                     return false;
-                }
+
                 confirmation = askUserConfirmation("\nIs " + first + " " + last + " correct? (y/n)");
             }
             return true;
@@ -178,7 +180,8 @@ namespace BankingLedger
             Console.Clear();
             Console.WriteLine("\nEnter your password (minimum 8 characters):");
 
-            while (prompt < MAXPROMPT && !UserUtility.createPassword(ref tempPass)) {
+            while (prompt < MAXPROMPT && !UserUtility.createPassword(ref tempPass)) 
+            {
                 prompt++;
                 Console.WriteLine("\nEnter your password (minimum 8 characters):");
             }
@@ -200,7 +203,8 @@ namespace BankingLedger
 
             Console.WriteLine("User Login");
 
-            if (users == null) {
+            if (users == null) 
+            {
                 Console.WriteLine("Access Denied.");
                 return false;
             }
@@ -210,10 +214,14 @@ namespace BankingLedger
 
             try {
                 UserUtility.verifyUser(ref users, ref id);
-            } catch (ArgumentNullException) {
+            } 
+            catch (ArgumentNullException) 
+            {
                 Console.WriteLine("Invalid Credentials.");
                 return false;
-            } catch (UnauthorizedAccessException) {
+            } 
+            catch (UnauthorizedAccessException) 
+            {
                 Console.WriteLine("Invalid Credentials.");
                 return false;
             }
@@ -222,7 +230,8 @@ namespace BankingLedger
             do {
                 key = Console.ReadKey(true);
 
-                if ((int) key.Key > 31 && (int) key.Key < 127) {
+                if ((int) key.Key > 31 && (int) key.Key < 127) 
+                {
                     temp += key.KeyChar;
                     Console.Write("*");
                 }
@@ -231,12 +240,13 @@ namespace BankingLedger
 
             try {
                 UserUtility.verifyPassword(ref users, ref user, id, ref temp);
-            } catch (UnauthorizedAccessException) {
+            } 
+            catch (UnauthorizedAccessException) 
+            {
                 Console.WriteLine("Invalid Credentials.");
                 user = null;
                 return false;
             }
-
             Console.WriteLine($"Credentials Verified.\n");
             return true;
         }
@@ -257,16 +267,22 @@ namespace BankingLedger
                 string amount = Console.ReadLine();
                 amountFormatted = formatCurrency(amount);
 
-                if (amountFormatted == (double) -1) {
+                if (amountFormatted == (double) -1) 
+                {
                     Console.WriteLine("Invalid value was entered.");
-                } else {
+                } 
+                else 
+                {
                     valid = true;
                 }
             } while (!valid && promptCount < MAXPROMPT);
 
-            if (!user.Checking.deposit(amountFormatted)) {
+            if (!user.Checking.deposit(amountFormatted)) 
+            {
                 Console.WriteLine("The amount was not deposited. Please try again.");
-            } else {
+            } 
+            else 
+            {
                 Console.WriteLine("Your transaction was successful.");
             }
         }
@@ -276,21 +292,24 @@ namespace BankingLedger
         {
             double formatted = (double) -1;
             if (string.IsNullOrEmpty(amountString))
-            {
                 return formatted;
-            }
 
             // Check that the parameter has a valid pattern
             string pattern = @"^$?\s*\d*.\d*\s*$";
             Regex regex = new Regex(pattern);
 
             // If the string is valid, convert to a double
-            if (regex.IsMatch(amountString)) {
+            if (regex.IsMatch(amountString)) 
+            {
                 try {
                     formatted = Convert.ToDouble(amountString);
-                } catch (FormatException) {
+                } 
+                catch (FormatException) 
+                {
                     Console.WriteLine($"Unable to convert '{amountString}' to a valid transaction value.");
-                } catch (OverflowException) {
+                } 
+                catch (OverflowException) 
+                {
                     Console.WriteLine($"{amountString} is outside a double type range");
                 }
             }
@@ -313,24 +332,24 @@ namespace BankingLedger
                 string amount = Console.ReadLine();
                 amountFormatted = formatCurrency(amount);
 
-                if (amountFormatted == (double) -1) {
+                if (amountFormatted == (double) -1) 
+                {
                     Console.WriteLine("Invalid value was entered.");
-                } else {
+                } 
+                else 
+                {
                     valid = true;
                 }
             } while (!valid && promptCount < MAXPROMPT);
 
             char continueTransaction = checkOverdrawn(ref user, amountFormatted);
 
-            if (!continueTransaction.Equals('Y')) {
-                if (!user.Checking.withdraw(amountFormatted)) {
-                    Console.WriteLine("The amount was not withdrawn.");
-                } else {
-                    Console.WriteLine("Your transaction was successful.");
-                }
-            } else {
-                Console.WriteLine("\nTransaction Cancelled");
-            }
+            if (!continueTransaction.Equals('Y') && user.Checking.withdraw(amountFormatted)) 
+            {
+                Console.WriteLine("Your transaction was successful.");
+                return;
+            } 
+            Console.WriteLine("\nTransaction Cancelled");
         }
 
         // check if user's account will be overdrawn
@@ -338,7 +357,8 @@ namespace BankingLedger
         {
             char confirmation = 'N';
 
-            if (user.Checking.Balance - amount < 0) {
+            if (user.Checking.Balance - amount < 0) 
+            {
                 Console.WriteLine($"\nWithdrawing {amount:C} will overdraw your account.");
                 confirmation = askUserConfirmation("\nWould you like to stop this transaction? (y/n)");
             }
@@ -372,9 +392,12 @@ namespace BankingLedger
             user.Checking.Ledger.ForEach(delegate(Transaction transaction)
             {
                 var time = UserUtility.convertTime(transaction.Timestamp);
-                if (time != null) {
+                if (time != null) 
+                {
                     Console.WriteLine($"{time, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
-                } else {
+                } 
+                else 
+                {
                     Console.WriteLine($"(UTC) {transaction.Timestamp, -10} {transaction.Type, 15} {transaction.Amount, 15:C}");
                 }
             });
@@ -395,6 +418,5 @@ namespace BankingLedger
         {
             Environment.Exit(1);
         }
-
     }
 }
