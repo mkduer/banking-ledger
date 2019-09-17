@@ -29,7 +29,7 @@ namespace BankingLedger.UnitTests
         [Theory]
         [InlineData("avalidusername", "")]
         [InlineData("a23r8u9ajfhasfmkld*)478", "")]
-        [InlineData("!@#$%^&*()_+~`-[]{}|: ;<,>.?/", "")]
+        [InlineData("!@#$%^&*()_+~`-[]{}|:;<,>.?/", "")]
         [InlineData("1234567890", "")]
         public void TestValidateUserID_ValidReferenceUserID(string id, string actualID)
         {
@@ -47,7 +47,7 @@ namespace BankingLedger.UnitTests
             UsersCollection users = new UsersCollection();
             User user = new User(actualID, "firstname", "lastname", "hash");
             users.add(user);
-            Assert.False(UserUtility.validateUserID(ref users, id, ref actualID));
+            Assert.Throws<FormatException>(() => UserUtility.validateUserID(ref users, id, ref actualID));
             Assert.Equal(id, actualID);
         }
 
@@ -58,7 +58,7 @@ namespace BankingLedger.UnitTests
             UsersCollection users = new UsersCollection();
             User user = new User(actualID, "firstname", "lastname", "hash");
             users.add(user);
-            Assert.False(UserUtility.validateUserID(ref users, id, ref actualID));
+            Assert.Throws<FormatException>(() => UserUtility.validateUserID(ref users, id, ref actualID));
             Assert.NotEqual(id, actualID);
         }
 
