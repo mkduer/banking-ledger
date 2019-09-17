@@ -6,8 +6,8 @@ namespace BankingLedger
     // The Menu class prompts the user with menu options
     public static class CLInterface
     {
-        public static int promptCount { get; set; }
         public const int MAXPROMPT = 4;
+        public static int promptCount { get; set; }
 
         // a welcome message
         public static void welcomeMessage()
@@ -83,7 +83,7 @@ namespace BankingLedger
         }
 
         // create details for new user
-        public static bool createUser(ref User user)
+        public static bool createUser(ref UsersCollection users, ref User user)
         {
             string id = "";
             string firstName = "";
@@ -93,22 +93,18 @@ namespace BankingLedger
             Console.Clear();
             Console.WriteLine("Let's create your account.");
 
-            if (!promptUserID(ref id)) {
-                return false;
-            }
-            
-            if (!promptRealName(ref firstName, ref lastName)) {
-                return false;
-            }
-            
-            if (!promptPassword(ref pass)) {
-                return false;
-            }
 
-            // create a new user with valid parameters
-            user = new User(id, firstName, lastName, pass);
+            if (promptUserID(ref id) && promptRealName(ref firstName, ref lastName) && promptPassword(ref pass)) {
+                // create a new user with valid parameters
+                user = new User(id, firstName, lastName, pass);
+                users.add(user);
 
-            return true;
+                // TODO
+                users.displayUsers();
+
+                return true;
+            }
+            return false;
         }
 
         // prompt for user ID
@@ -189,7 +185,7 @@ namespace BankingLedger
         }
 
         // login user if valid
-        public static bool login(ref User user)
+        public static bool login(ref UsersCollection users, ref User user)
         {
             string id = "";
             string temp = "";
@@ -197,8 +193,8 @@ namespace BankingLedger
 
             Console.WriteLine("User Login");
 
-            if (user == null) {
-                Console.WriteLine("Invalid Credentials.");
+            if (users == null) {
+                Console.WriteLine("Access Denied.");
                 return false;
             }
 
@@ -206,7 +202,7 @@ namespace BankingLedger
             id = Console.ReadLine();
 
             try {
-                UserUtility.verifyUser(ref user, ref id);
+                UserUtility.verifyUser(ref users, ref id);
             } catch (UnauthorizedAccessException) {
                 Console.WriteLine("Invalid Credentials.");
                 return false;
@@ -224,9 +220,10 @@ namespace BankingLedger
             Console.WriteLine();
 
             try {
-                UserUtility.verifyPassword(ref user, ref temp);
+                UserUtility.verifyPassword(ref users, ref user, id, ref temp);
             } catch (UnauthorizedAccessException) {
                 Console.WriteLine("Invalid Credentials.");
+                user = null;
                 return false;
             }
 

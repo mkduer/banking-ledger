@@ -49,15 +49,15 @@ namespace BankingLedger
         }
 
         // verify password
-        public static bool verifyPassword(ref User user, ref string temp)
+        public static bool verifyPassword(ref UsersCollection users, ref User user, string id, ref string temp)
         {
-            return _verifyPassword(ref user, ref temp);
+            return _verifyPassword(ref users, ref user, id, ref temp);
         }
 
         // verify user is valid
-        public static bool verifyUser(ref User user, ref string id)
+        public static bool verifyUser(ref UsersCollection users, ref string id)
         {
-            return _verifyUser(ref user, ref id);
+            return _verifyUser(ref users, ref id);
         }
 
         // convert the provided time into the user's local time
@@ -117,22 +117,24 @@ namespace BankingLedger
         }
 
         // verify that username matches
-        private static bool _verifyUser(ref User user, ref string id)
+        private static bool _verifyUser(ref UsersCollection users, ref string id)
         {
-            if (id != user.UserID) {
+            if (!users.hasUser(id)) {
                 throw new UnauthorizedAccessException();
             }
             return true;
         }
 
         // verify password
-        private static bool _verifyPassword(ref User user, ref string temp)
+        private static bool _verifyPassword(ref UsersCollection users, ref User user, string id, ref string temp)
         {
             // modified from source: https://stackoverflow.com/questions/4181198/how-to-hash-a-password/10402129#10402129
             // this version incorporates SHA256 explicitly, while many versions online use SHA1 behind the PBKF2 function
             if (string.IsNullOrEmpty(temp)) {
                 throw new UnauthorizedAccessException();
             }
+
+            user = users.retrieveUser(id);
 
             byte[] hashBytes = Convert.FromBase64String(user.Hash);
             byte[] salt = new byte[_BYTESIZE];

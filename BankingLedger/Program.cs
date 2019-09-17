@@ -7,7 +7,7 @@ namespace BankingLedger
         static void Main(string[] args)
         {
             bool exit = false;
-            User user = null;
+            UsersCollection users = new UsersCollection();
 
             // Welcome user
             CLInterface.welcomeMessage();
@@ -17,7 +17,7 @@ namespace BankingLedger
             do {
 
                 ConsoleKey selection = mainMenuPrompt();
-                exit = mainMenu(ref user, selection);
+                exit = mainMenu(ref users, selection);
 
             } while (!exit);
         }
@@ -47,24 +47,26 @@ namespace BankingLedger
         }
 
         // create welcome account menu
-        private static bool mainMenu(ref User user, ConsoleKey selection)
+        private static bool mainMenu(ref UsersCollection users, ConsoleKey selection)
         {
             bool exit = false;
+            User createUser = null;
+            User loginUser = null;
 
             // Handle user's selection
             Console.Clear();
             switch (selection) {
                 case ConsoleKey.D1:
-                    if (CLInterface.login(ref user)) {
-                        CLInterface.welcomeUser(ref user);
-                        accountMenuPrompt(ref user);
+                    if (CLInterface.login(ref users, ref loginUser)) {
+                        CLInterface.welcomeUser(ref loginUser);
+                        accountMenuPrompt(ref loginUser);
                     } else {
                         CLInterface.contactSupport("Login");
                     }
                     break;
                 case ConsoleKey.D2:
-                    if (CLInterface.createUser(ref user)) {
-                        CLInterface.confirmUserCreation(ref user);
+                    if (CLInterface.createUser(ref users, ref createUser)) {
+                        CLInterface.confirmUserCreation(ref createUser);
                     } else {
                         CLInterface.contactSupport("Account Creation");
                     }

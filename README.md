@@ -4,12 +4,13 @@
 ```
 banking-ledger/
   |_BankingLedger/
-       |_Program.cs      <- main program that is run
-       |_CLInterface.cs  <- provides command line interface
-       |_UserUtility.cs  <- handles logic behind creating valid user data
-       |_User.cs         <- data store for user data
-       |_Account.cs      <- handles logic behind account transactions
-       |_Transaction.cs  <- data store for transaction data
+       |_Program.cs          <- main program that is run
+       |_CLInterface.cs      <- provides command line interface
+       |_UserUtility.cs      <- handles logic behind creating valid user data
+       |_User.cs             <- data store for user data
+       |_UsersCollection.cs  <- handles collection of users
+       |_Account.cs          <- handles logic behind account transactions
+       |_Transaction.cs      <- data store for transaction data
   |_BankingLedger.Tests/
        |_BankingLedger_TestUserUtility.cs
        |_BankingLedger_TestAccount.cs
