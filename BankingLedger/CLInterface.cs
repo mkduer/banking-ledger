@@ -460,6 +460,8 @@ namespace BankingLedger
         private static bool _createPassword(ref string temp)
         {
             ConsoleKeyInfo key;
+            int topRow = Console.CursorTop;
+            int leftCol = Console.CursorLeft;
             temp = "";
 
             // Create a valid password allowing for a maximum of characters, symbols, numbers
@@ -475,7 +477,7 @@ namespace BankingLedger
                     Console.Write("*");
                 } 
 
-                // if the user deletes a key
+                // if the user deletes
                 if ((key.Key == ConsoleKey.Backspace || key.Key == ConsoleKey.Delete) && temp.Length > 0) 
                 {
                     Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
