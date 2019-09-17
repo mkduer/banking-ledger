@@ -2,6 +2,9 @@ using System;
 
 namespace BankingLedger
 {
+    // A TransactionType enum describes what type of transaction occurred
+    public enum TransactionType { Deposit, Withdraw }
+
     // The Transaction class represents a single transaction
     // consisting of an amount and type of transaction
     public class Transaction
@@ -20,9 +23,10 @@ namespace BankingLedger
             get { return _amount; }
             set { _amount = value; }
         }
-        private string _type;
 
-        public string Type
+        private TransactionType _type;
+
+        public TransactionType Type
         { 
             get { return _type; }
             set { _type = value; }

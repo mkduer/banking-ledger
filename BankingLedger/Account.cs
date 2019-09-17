@@ -50,7 +50,7 @@ namespace BankingLedger
             }
 
             this._balance += amount;
-            this._recordTransaction(amount, "deposit");
+            this._recordTransaction(amount, TransactionType.Deposit);
             return true;
         }
 
@@ -64,12 +64,12 @@ namespace BankingLedger
             }
 
             this._balance -= amount;
-            this._recordTransaction(amount, "withdraw");
+            this._recordTransaction(amount, TransactionType.Withdraw);
             return true;
         }
 
         // record the transaction in the ledger
-        private bool _recordTransaction(double amount, string type)
+        private bool _recordTransaction(double amount, TransactionType type)
         {
             DateTime timestamp = DateTime.UtcNow;
 
@@ -77,7 +77,7 @@ namespace BankingLedger
                 return false;
             }
 
-            if (type == "withdraw") {
+            if (type == TransactionType.Withdraw) {
                 amount *= -1;
             }
             this._ledger.Add(new Transaction() { Timestamp = timestamp, Amount = amount, Type = type });
