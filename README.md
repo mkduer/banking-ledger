@@ -15,6 +15,7 @@ banking-ledger/
        |_BankingLedger_TestUserUtility.cs
        |_BankingLedger_TestAccount.cs
        |_BankingLedger_TestTransaction.cs
+       |_BankingLedger_TestUsersCollection.cs
   |_README.md
 ```
 
