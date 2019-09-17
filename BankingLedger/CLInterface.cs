@@ -192,13 +192,18 @@ namespace BankingLedger
 
             // Ensure the password is set and within the maximum prompts allowed
             Console.Clear();
-            Console.WriteLine("\nEnter your password (minimum 8 characters):");
-
             while (prompt < MAXPROMPT && !success) 
             {
                 prompt++;
                 Console.WriteLine("\nEnter your password (minimum 8 characters):");
-                success = createPassword(ref tempPass);
+                try 
+                {
+                    success = createPassword(ref tempPass);
+                }
+                catch (ArgumentException)
+                {
+                    Console.WriteLine("Invalid Password");
+                }
             }
 
             if (!success)
@@ -455,6 +460,8 @@ namespace BankingLedger
         private static bool _createPassword(ref string temp)
         {
             ConsoleKeyInfo key;
+            int topRow = Console.CursorTop;
+            int leftCol = Console.CursorLeft;
             temp = "";
 
             // Create a valid password allowing for a maximum of characters, symbols, numbers
@@ -463,10 +470,20 @@ namespace BankingLedger
             {
                 key = Console.ReadKey(true);
 
-                if ((int) key.Key > 31 && (int) key.Key < 127) 
+                // if a valid key is entered
+                if (((int) key.Key > 31 && (int) key.Key < 127))
                 {
                     temp += key.KeyChar;
                     Console.Write("*");
+                } 
+
+                // if the user deletes
+                if ((key.Key == ConsoleKey.Backspace || key.Key == ConsoleKey.Delete) && temp.Length > 0) 
+                {
+                    Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                    Console.Write(" ");
+                    Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+                    temp = temp.Substring(0, temp.Length - 1);
                 }
             } while (key.Key != ConsoleKey.Enter);
             Console.WriteLine();
