@@ -216,8 +216,7 @@ namespace BankingLedger
         public static bool login(ref UsersCollection users, ref User user)
         {
             string id = "";
-            string temp = "";
-            ConsoleKeyInfo key;
+            string pass = "";
 
             Console.WriteLine("User Login");
 
@@ -246,21 +245,20 @@ namespace BankingLedger
             }
 
             Console.WriteLine("\nEnter your password:");
-            do 
+            try 
             {
-                key = Console.ReadKey(true);
-
-                if ((int) key.Key > 31 && (int) key.Key < 127) 
-                {
-                    temp += key.KeyChar;
-                    Console.Write("*");
-                }
-            } while (key.Key != ConsoleKey.Enter);
+                createPassword(ref pass);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Invalid Credentials");
+                return false;
+            }
             Console.WriteLine();
 
             try 
             {
-                UserUtility.verifyPassword(ref users, ref user, id, ref temp);
+                UserUtility.verifyPassword(ref users, ref user, id, ref pass);
             } 
             catch (UnauthorizedAccessException) 
             {
@@ -470,7 +468,7 @@ namespace BankingLedger
             if (temp.Length < 8 || string.IsNullOrEmpty(temp)) 
             {
                 temp = "";
-                return false;
+                throw new ArgumentException();
             }
             return true;
         }
