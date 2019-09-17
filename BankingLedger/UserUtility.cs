@@ -120,6 +120,10 @@ namespace BankingLedger
         // verify that username matches
         private static bool _verifyUser(ref UsersCollection users, ref string id)
         {
+            if (id == null) {
+                throw new ArgumentNullException();
+            }
+
             if (!users.hasUser(id)) {
                 throw new UnauthorizedAccessException();
             }

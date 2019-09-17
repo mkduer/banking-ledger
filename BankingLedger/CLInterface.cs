@@ -210,6 +210,9 @@ namespace BankingLedger
 
             try {
                 UserUtility.verifyUser(ref users, ref id);
+            } catch (ArgumentNullException) {
+                Console.WriteLine("Invalid Credentials.");
+                return false;
             } catch (UnauthorizedAccessException) {
                 Console.WriteLine("Invalid Credentials.");
                 return false;
