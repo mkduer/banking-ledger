@@ -36,6 +36,7 @@ namespace BankingLedger.UnitTests
         [Theory]
         [InlineData(0)]
         [InlineData(10)]
+        [InlineData(.05)]
         [InlineData(746123484486.23498725)]
         [InlineData(999999999999.99999999)]
         public void TestValidDeposit_CorrectBalanceIncrease(double amount)
@@ -57,6 +58,7 @@ namespace BankingLedger.UnitTests
         [Theory]
         [InlineData(0)]
         [InlineData(98)]
+        [InlineData(.05)]
         [InlineData(746123484486.23498725)]
         [InlineData(999999999999.99999999)]
         public void TestValidWithdrawal_CorrectBalanceDecrease(double amount)
