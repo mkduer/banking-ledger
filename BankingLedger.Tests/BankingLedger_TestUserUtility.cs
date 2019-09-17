@@ -7,12 +7,23 @@ namespace BankingLedger.UnitTests
     {
         [Theory]
         [InlineData("validusername", "")]
-        [InlineData("validusername", null)]
         [InlineData("validusername", "invalid")]
-        public void TestVerifyUser_InvalidUsernameThrowsException(string id, string refUserID)
+        public void TestVerifyUser_InvalidUsernameThrowsException(string id, string actualID)
         {
+            UsersCollection users = new UsersCollection();
             User user = new User(id, "firstname", "lastname", "hash");
-            Assert.Throws<UnauthorizedAccessException>(() => UserUtility.verifyUser(ref user, ref refUserID));
+            users.add(user);
+            Assert.Throws<UnauthorizedAccessException>(() => UserUtility.verifyUser(ref users, ref actualID));
+        }
+
+        [Theory]
+        [InlineData("validusername", null)]
+        public void TestVerifyUser_NullUsernameThrowsException(string id, string actualID)
+        {
+            UsersCollection users = new UsersCollection();
+            User user = new User(id, "firstname", "lastname", "hash");
+            users.add(user);
+            Assert.Throws<ArgumentNullException>(() => UserUtility.verifyUser(ref users, ref actualID));
         }
 
         [Theory]
@@ -20,26 +31,35 @@ namespace BankingLedger.UnitTests
         [InlineData("a23r8u9ajfhasfmkld*)478", "")]
         [InlineData("!@#$%^&*()_+~`-[]{}|: ;<,>.?/", "")]
         [InlineData("1234567890", "")]
-        public void TestValidateUserID_ValidReferenceUserID(string id, string refUserID)
+        public void TestValidateUserID_ValidReferenceUserID(string id, string actualID)
         {
-            Assert.True(UserUtility.validateUserID(id, ref refUserID));
-            Assert.Equal(id, refUserID);
+            UsersCollection users = new UsersCollection();
+            User user = new User(actualID, "firstname", "lastname", "hash");
+            users.add(user);
+            Assert.True(UserUtility.validateUserID(ref users, id, ref actualID));
+            Assert.Equal(id, actualID);
         }
 
         [Theory]
         [InlineData("", "")]
-        public void TestValidateUserID_InvalidEmptyStringId(string id, string refUserID)
+        public void TestValidateUserID_InvalidEmptyStringId(string id, string actualID)
         {
-            Assert.False(UserUtility.validateUserID(id, ref refUserID));
-            Assert.Equal(id, refUserID);
+            UsersCollection users = new UsersCollection();
+            User user = new User(actualID, "firstname", "lastname", "hash");
+            users.add(user);
+            Assert.False(UserUtility.validateUserID(ref users, id, ref actualID));
+            Assert.Equal(id, actualID);
         }
 
         [Theory]
         [InlineData(null, "")]
-        public void TestValidateUserID_InvalidNullStringId(string id, string refUserID)
+        public void TestValidateUserID_InvalidNullStringId(string id, string actualID)
         {
-            Assert.False(UserUtility.validateUserID(id, ref refUserID));
-            Assert.NotEqual(id, refUserID);
+            UsersCollection users = new UsersCollection();
+            User user = new User(actualID, "firstname", "lastname", "hash");
+            users.add(user);
+            Assert.False(UserUtility.validateUserID(ref users, id, ref actualID));
+            Assert.NotEqual(id, actualID);
         }
 
         [Theory]
