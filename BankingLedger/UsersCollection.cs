@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace BankingLedger
 {
+    // The UsersCollection handles a collection of users
+    // providing methods to add, retrieve, display and check if they exist
     public class UsersCollection
     {
         private Dictionary<string, User> _users;
