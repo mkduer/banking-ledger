@@ -16,17 +16,17 @@ namespace BankingLedger
             // check for valid selection until program is exited 
             do
             {
-                ConsoleKey selection = mainMenuPrompt();
+                ConsoleKey selection = menuPrompt(CLInterface.mainMenuOptions);
                 exit = mainMenu(ref users, selection);
             } while (!exit);
         }
 
         // provides main menu prompt
-        private static ConsoleKey mainMenuPrompt()
+        private static ConsoleKey menuPrompt(Func<ConsoleKey[]> menuOptions)
         {
             ConsoleKey[] validOptions = null;
             CLInterface.resetPrompt();
-            CLInterface.mainMenuOptions(ref validOptions);
+            validOptions = menuOptions();
             ConsoleKey selection = Console.ReadKey(true).Key;
 
             // Re-prompting up to the maximum number of prompt allowances
@@ -34,7 +34,7 @@ namespace BankingLedger
             {
                 CLInterface.increasePromptCount();;
                 CLInterface.invalidSelectionAttemptCount();
-                CLInterface.mainMenuOptions(ref validOptions);
+                validOptions = menuOptions();
                 selection = Console.ReadKey(true).Key;
             }
 
@@ -49,6 +49,7 @@ namespace BankingLedger
         private static bool mainMenu(ref UsersCollection users, ConsoleKey selection)
         {
             bool exit = false;
+            bool logout = false;
             User createUser = null;
             User loginUser = null;
 
@@ -59,7 +60,13 @@ namespace BankingLedger
                     if (CLInterface.login(ref users, ref loginUser)) 
                     {
                         CLInterface.welcomeUser(ref loginUser);
-                        accountMenuPrompt(ref loginUser);
+                        do 
+                        {
+                            ConsoleKey option = menuPrompt(CLInterface.accountMenuOptions);
+                            logout = accountMenu(option, ref loginUser);
+                        } while (!logout);
+
+                        logout = false;
                     } 
                     else 
                     {
@@ -82,41 +89,6 @@ namespace BankingLedger
                     break;
             }
             return exit;
-        }
-
-        // provides user account menu prompt
-        private static void accountMenuPrompt(ref User user)
-        {
-            bool logout = false;
-
-            // Provide user banking menu options 
-            // check for valid selection until user logs out
-            do 
-            {
-                ConsoleKey[] validOptions = null;
-
-                CLInterface.resetPrompt();
-                CLInterface.accountMenuOptions(ref validOptions);
-                ConsoleKey selection = Console.ReadKey(true).Key;
-
-                // Re-prompting up to the maximum number of prompt allowances
-                while (Array.Exists<ConsoleKey>(validOptions, option => option == selection) == false && CLInterface.promptCount < CLInterface.MAXPROMPT) 
-                {
-                    CLInterface.increasePromptCount();;
-                    CLInterface.invalidSelectionAttemptCount();
-                    CLInterface.accountMenuOptions(ref validOptions);
-                    selection = Console.ReadKey(true).Key;
-                }
-
-                // Program exits if too many unsuccessful selections were attempted
-                if (CLInterface.promptCount >= CLInterface.MAXPROMPT) 
-                {
-                    CLInterface.exit_TooManyInvalidKeyPresses();
-                }
-
-                logout = accountMenu(selection, ref user);
-
-            } while (!logout);
         }
 
         // create user account menu
