@@ -2,6 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace BankingLedger
 {
@@ -13,23 +14,31 @@ namespace BankingLedger
         private const int _MAXBYTESIZE = 23;
         private const int _ITERATIONS = 3000;
 
-        // check that id parameter is valid and that the id is not already taken
-        public static bool validateUserID(ref UsersCollection users, string id, ref string userID)
+        // check that testID parameter is valid and that the testID is not already taken
+        // if successful, the testID is copied into the userID
+        public static bool validateUserID(ref UsersCollection users, string testID, ref string userID)
         {
-            if (string.IsNullOrEmpty(id) || id.Contains(" "))
+            string pattern = @"[\s\\'""]+";
+            Regex regex = new Regex(pattern);
+
+            if (string.IsNullOrEmpty(testID) || regex.IsMatch(testID))
                 throw new FormatException();
 
-            if (users.hasUser(id))
+            if (users.hasUser(testID))
                 throw new ArgumentException();
 
-            userID = id;
+            userID = testID;
             return true;
         }
 
         // check that name parameters are valid
         public static bool validateRealName(string first, string last, ref string userFirstName, ref string userLastName)
         {
-            if (string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last)) 
+
+            string pattern = @"[\\'""]+";
+            Regex regex = new Regex(pattern);
+
+            if (string.IsNullOrEmpty(first) || string.IsNullOrEmpty(last) || regex.IsMatch(first) || regex.IsMatch(last)) 
                 return false;
 
             userFirstName = first;

@@ -124,7 +124,7 @@ namespace BankingLedger
 
             while (!confirmation.Equals('Y')) 
             {
-                Console.WriteLine("\nPlease create a username (no spaces allowed):");
+                Console.WriteLine("\nPlease create a username (cannot contain: \', \", \\, space):");
                 id = Console.ReadLine();
 
                 try
@@ -195,7 +195,7 @@ namespace BankingLedger
             while (prompt < MAXPROMPT && !success) 
             {
                 prompt++;
-                Console.WriteLine("\nEnter your password (minimum 8 characters):");
+                Console.WriteLine("\nEnter your password (Minimum 8 characters. Cannot contain: \', \", \\):");
                 try 
                 {
                     success = createPassword(ref tempPass);
@@ -460,8 +460,6 @@ namespace BankingLedger
         private static bool _createPassword(ref string temp)
         {
             ConsoleKeyInfo key;
-            int topRow = Console.CursorTop;
-            int leftCol = Console.CursorLeft;
             temp = "";
 
             // Create a valid password allowing for a maximum of characters, symbols, numbers
@@ -488,7 +486,10 @@ namespace BankingLedger
             } while (key.Key != ConsoleKey.Enter);
             Console.WriteLine();
 
-            if (temp.Length < 8 || string.IsNullOrEmpty(temp)) 
+            string pattern = @"[\\'""]+";
+            Regex regex = new Regex(pattern);
+
+            if (temp.Length < 8 || string.IsNullOrEmpty(temp) || regex.IsMatch(temp)) 
             {
                 temp = "";
                 throw new ArgumentException();
