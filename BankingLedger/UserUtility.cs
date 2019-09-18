@@ -46,7 +46,6 @@ namespace BankingLedger
             return true;
         }
 
-        // create user password
         // create hash and salt
         public static bool createHashSalt(ref string temp)
         {

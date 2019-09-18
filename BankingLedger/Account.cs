@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace BankingLedger
 {
     // The Account class handles the balance and ledger attributes 
-    // while providing methods and their wrappers for modifying 
-    // and displaying the attributes
+    // while providing methods for modifying and displaying the attributes
+
     public class Account
     {
         private double _balance;

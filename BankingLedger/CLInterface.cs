@@ -3,7 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace BankingLedger
 {
-    // The Menu class prompts the user with menu options
+    // The CLInterface class prompts the user with menu options
+    // and handles any dialogue with the user
     public static class CLInterface
     {
         public const int MAXPROMPT = 4;
@@ -74,6 +75,8 @@ namespace BankingLedger
             _exitProgram();
         }
 
+        // provides confirmation to the user that their account 
+        // was created with the correct username and name
         public static void confirmUserCreation(ref User user)
         {
             Console.WriteLine($"Your account was created successfully\n");
@@ -212,6 +215,7 @@ namespace BankingLedger
             return UserUtility.createHashSalt(ref tempPass);
         }
 
+        // create a password
         public static bool createPassword(ref string temp)
         {
             return _createPassword(ref temp);

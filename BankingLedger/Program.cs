@@ -2,8 +2,10 @@
 
 namespace BankingLedger
 {
+    // The Program class is the program that must be run to start the banking ledger program
     class Program
     {
+        // provides the main structure of the program from start to exit
         static void Main(string[] args)
         {
             bool exit = false;
@@ -21,7 +23,8 @@ namespace BankingLedger
             } while (!exit);
         }
 
-        // provides main menu prompt
+        // provides a menu prompt by taking a parameterized function
+        // that displays the menu and returns the user's selection from the menu
         private static ConsoleKey menuPrompt(Func<ConsoleKey[]> menuOptions)
         {
             ConsoleKey[] validOptions = null;
@@ -45,7 +48,7 @@ namespace BankingLedger
             return selection;
         }
 
-        // create welcome account menu
+        // create main menu
         private static bool mainMenu(ref UsersCollection users, ConsoleKey selection)
         {
             bool exit = false;
