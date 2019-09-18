@@ -17,7 +17,7 @@ namespace BankingLedger
         }
 
         // a main menu that returns valid key stroke options
-        public static void mainMenuOptions(ref ConsoleKey[] options)
+        public static Func<ConsoleKey[]> mainMenuOptions = () =>
         {
             Console.WriteLine("\nPlease select from the following options:");
             Console.WriteLine("(1) Login");
@@ -25,11 +25,11 @@ namespace BankingLedger
             Console.WriteLine("(Esc) Exit Program");
             Console.WriteLine("\nExample: To create an account, you would type 2\n");
 
-            options = new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
-        }
+            return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.Escape};
+        };
 
         // a user account menu that returns valid key stroke options
-        public static void accountMenuOptions(ref ConsoleKey[] options)
+        public static Func<ConsoleKey[]> accountMenuOptions = () =>
         {
             Console.WriteLine("\nPlease select from the following options:");
             Console.WriteLine("(1) Deposit");
@@ -38,9 +38,9 @@ namespace BankingLedger
             Console.WriteLine("(4) View Recent Transactions");
             Console.WriteLine("(5) Logout\n");
 
-            options = new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.D3, 
-                                        ConsoleKey.D4, ConsoleKey.D5, ConsoleKey.Escape};
-        }
+            return new ConsoleKey[] {ConsoleKey.D1, ConsoleKey.D2, ConsoleKey.D3, 
+                                     ConsoleKey.D4, ConsoleKey.D5, ConsoleKey.Escape};
+        };
 
         // increment prompt count
         public static void increasePromptCount()
